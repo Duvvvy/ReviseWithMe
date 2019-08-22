@@ -7,7 +7,8 @@ const App: React.FC = () => {
     <div>
 
       Hello, From Tatsuki, Ryan, Christian, Lin and Raman
-
+      whatsup people
+      what you up too?
 
     </div>
   );
