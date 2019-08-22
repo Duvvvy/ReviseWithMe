@@ -5,8 +5,7 @@ import './App.css';
 const App: React.FC = () => {
   return (
     <div>
-      Hello, From Ryan
-      Hello from Christian
+      Hello, From Tatsuki, Ryan, Christian
     </div>
   );
 }
