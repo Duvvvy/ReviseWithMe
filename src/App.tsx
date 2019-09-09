@@ -1,15 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import NotesView from "./Components/NotesView";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const App: React.FC = () => {
   return (
     <div>
-
-      Hello, From Tatsuki, Ryan, Christian, Lin and Raman
-      whatsup people
-      what you up too?
-
+      <NotesView></NotesView>
     </div>
   );
 }
