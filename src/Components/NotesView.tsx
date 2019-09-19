@@ -33,7 +33,7 @@ const initialState = {
   title: "Enter Title",
   description: "Enter Description",
   body: "depreciated",
-  date: "not long ago?",
+  date: "¯\\_(ツ)_/¯",
   time: 0,
   currentCard: -1,
   currentImageBase64: 0,
@@ -188,7 +188,7 @@ class NotesView extends React.Component <IProps, IState> {
         title: values.title,
         description: values.description,
         body: "depreciated",
-        date: "not long ago?",
+        date: `¯\\_(ツ)_/¯`,
         time: "0",
         noteID: "unassigned",
         src: "./logo192.png"
@@ -203,15 +203,14 @@ render() {
       
       <div>
 
-        <button className='btn-primary' 
+        <button className='btn-primary'
             onClick={()=> {
               this.openCreationModal()
               console.log(this.state)
               console.log("working")
           }
-        }>
+        }>+</button>
 
-        </button>
         <div className="main-content">
           <div className="content">
             {items.map((textArea, index) => (
@@ -235,14 +234,14 @@ render() {
               <p id='note-body'>
                 {this.state.description}
               </p>
-              <button onClick={()=> 
+              <button className="btn-primary" onClick={()=> 
                 {
                   this.confirmDelete()
                   this.toggle()
                   
                 }
               }
-              >delete note</button>
+              >Delete note</button>
 
           </ModalBody>
         </Modal>
@@ -280,11 +279,11 @@ render() {
           <pre>
               {JSON.stringify(values, null, 2)}
           </pre>
-          <Button type="submit"></Button>
+          <Button className="btn-primary" type="submit">Confirm</Button>
         </Form>
     
         }</Formik>
-              <button onClick={()=> 
+              <button className="btn-primary" onClick={()=> 
                 {
                   this.confirmDelete()
                   this.toggleCreationModal()
