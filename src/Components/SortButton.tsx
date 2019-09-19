@@ -1,5 +1,4 @@
 import React from 'react';
-import setSortState from "./NotesView";
 
 interface ITestState {
     selectedValue: string;
@@ -14,10 +13,9 @@ class SortButton extends React.Component<{}, ITestState> {
 
     change(event: React.FormEvent<HTMLSelectElement>) {
         var safeSearchTypeValue: string = event.currentTarget.value;
-        const sort  = new setSortState(safeSearchTypeValue);
-        // console.log(safeSearchTypeValue); // in chrome => B
-        alert(safeSearchTypeValue);
-        //change the key
+
+        console.log(safeSearchTypeValue); // in chrome => B
+        alert();
         this.setState({
             selectedValue: safeSearchTypeValue
         });
@@ -28,7 +26,6 @@ class SortButton extends React.Component<{}, ITestState> {
             <div>
                 <select id="searchType" onChange={ e => this.change(e) } value={ this.state.selectedValue }>
                     <option value="Date">Date</option>
-                    <option value="Title">Title</option>
                     <option value="Favorites">Favourite</option>
                 </select>
                 </div>
