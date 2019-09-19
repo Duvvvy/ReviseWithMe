@@ -1,51 +1,7 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 
-var items = [
-  {
-    title: "test note title 1",
-    body: "test body 1",
-    description: "test note description 1",
-    date: "1st of testuary",
-    time: "11am",
-    noteID: "n1",
-    src: "https://i.imgur.com/o3j9qSk.jpg"
-},
-{
-    title: "test note title 2",
-    body: "test body 2",
-    description: `test note description 2, 
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum blandit rhoncus egestas. Donec sapien ante, aliquam cursus diam gravida, varius pharetra sapien. Donec non pharetra velit. Morbi nec suscipit orci. Nunc dui tortor, pulvinar sit amet mattis ac, aliquam ut dui. Donec aliquet ut turpis maximus mollis. Sed pellentesque ligula at neque rhoncus pretium. Donec tincidunt magna neque, imperdiet suscipit justo sodales ac.
 
-Aenean tempus, justo ac dictum mollis, urna nibh venenatis orci, non vulputate dolor massa a mauris. Morbi egestas interdum massa, ac vestibulum ante. Nullam id luctus mi. Nam cursus porttitor mauris. Cras a quam sit amet mi sagittis interdum eu nec odio. Integer ex odio, feugiat consectetur libero eu, auctor condimentum neque. In facilisis augue nec dui faucibus, a congue nulla iaculis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque aliquam vestibulum ipsum. Nullam tempus viverra commodo. Maecenas aliquet nisl a odio bibendum, et pulvinar lorem fringilla. Curabitur vitae libero leo. Fusce facilisis tortor sed ullamcorper suscipit.
-
-Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed lectus suscipit, nec aliquam dolor malesuada. Nam semper vitae felis a vestibulum. Quisque vitae facilisis felis, id tincidunt dolor. Vestibulum blandit, ipsum a egestas porta, lorem felis fermentum turpis, ultrices imperdiet eros mauris vitae mauris. Nunc vitae sem at leo elementum fermentum non nec ante. Morbi consequat quam urna, at eleifend arcu auctor quis.
-    
-    `,
-    date: "2nd of testuary",
-    time: "12am",
-    noteID: "n2",
-    src: "https://i.imgur.com/0kCZcQv.jpg"
-},
-{
-    title: "test note title 3",
-    body: "test body 3",
-    description: "test note description 3",
-    date: "3rd of testuary",
-    time: "3pm",
-    noteID: "n3",
-    src: "https://i.imgur.com/8SFJ8Xl.jpg" 
-},
-{
-    title: "test note title 4",
-    body: "test body 4",
-    description: "test note description 4",
-    date: "4th of testuary",
-    time: "4pm",
-    noteID: "n4",
-    src: "https://i.imgur.com/EhdZZ0R.jpg"
-}
-];
 
 
 interface IState{
@@ -73,12 +29,16 @@ const initialState = {
 }
 
 interface IProps{
+  notesArray: any
 
 }
+
+var items: { map: (arg0: (textArea: any, index: any) => JSX.Element) => React.ReactNode; };
 
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
+    items = this.props.notesArray;
 
     this.state = {
         ...initialState
@@ -87,7 +47,7 @@ class NotesView extends React.Component <IProps, IState> {
 
   async openImage(index:number) {
     console.log(index);
-    const image = items[index];
+    const image = this.props.notesArray[index];
       const base_image = new Image();
       base_image.src = image.src;
       const base64 = await this.getBase64Image(image.src);
@@ -97,9 +57,9 @@ class NotesView extends React.Component <IProps, IState> {
         currentImageBase64: base64,
         isModalOpen: true,
         ratio: ratio,
-        title: items[index].title,
-        body: items[index].body,
-        description: items[index].description
+        title: this.props.notesArray[index].title,
+        body: this.props.notesArray[index].body,
+        description: this.props.notesArray[index].description
       })
       console.log(this.state)
     }
@@ -132,12 +92,12 @@ render() {
           <div className="content">
             {items.map((textArea, index) => (
               <div className="image-holder" key={textArea.title}>
-                <p >{items[index].date}</p>
-                <p>{items[index].description}</p>
+                <p >{this.props.notesArray[index].date}</p>
+                <p>{this.props.notesArray[index].description}</p>
                 <span className="bottom-caption"
                   onClick={() => this.openImage(index)}
                 >
-                  {items[index].title}
+                  {this.props.notesArray[index].title}
                 </span>
                 <p id='note-title'>
                 </p>
@@ -151,15 +111,18 @@ render() {
               <p id='note-body'>
                 {this.state.description}
               </p>
+              <button onClick={()=> 
+                {
+                  delete this.props.notesArray[this.state.currentCard]
+                  this.toggle()
+                }
+              }
+              >delete note</button>
           </ModalBody>
         </Modal>
       </div>
     )
   }
-  
- 
-
-
 }
 
 export default NotesView;
