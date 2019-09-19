@@ -1,67 +1,45 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-
-const debugDBImages = [
-  {
-    title: "test note title 1",
-    description: "test note description 1",
-    date: "1st of testuary",
-    time: "11am",
-    noteID: "n1",
-    src: "https://i.imgur.com/o3j9qSk.jpg"
-},
-{
-    title: "test note title 2",
-    description: "test note description 2",
-    date: "2nd of testuary",
-    time: "12am",
-    noteID: "n2",
-    src: "https://i.imgur.com/0kCZcQv.jpg"
-},
-{
-    title: "test note title 3",
-    description: "test note description 3",
-    date: "3rd of testuary",
-    time: "3pm",
-    noteID: "n3",
-    src: "https://i.imgur.com/8SFJ8Xl.jpg" 
-},
-{
-    title: "test note title 4",
-    description: "test note description 4",
-    date: "4th of testuary",
-    time: "4pm",
-    noteID: "n4",
-    src: "https://i.imgur.com/EhdZZ0R.jpg"
-}
-];
-
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 interface IState{
   isModalOpen: boolean,
   title: String,
   description: String,
+  body: string,
   date: String,
   time: number,
   currentCard: number,
+  currentImageBase64: any,
+  ratio: number,
+  key: string
 }
 
 const initialState = {
   isModalOpen: false,
   title: "no title",
   description: "no description",
+  body: "no body",
   date: "not long ago?",
   time: 0,
   currentCard: 0,
+  currentImageBase64: 0,
+  ratio: 1,
+  key: "textArea.time"
 }
 
 interface IProps{
+  notesArray: any
 
 }
+
+var items: { map: (arg0: (textArea: any, index: any) => JSX.Element) => React.ReactNode; };
 
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
+    items = this.props.notesArray;
 
     this.state = {
         ...initialState
@@ -69,17 +47,22 @@ class NotesView extends React.Component <IProps, IState> {
   }
 
   async openImage(index:number) {
-    const image = debugDBImages[index];
+    console.log(index);
+    const image = this.props.notesArray[index];
       const base_image = new Image();
       base_image.src = image.src;
       const base64 = await this.getBase64Image(image.src);
       const ratio = await (base_image.width / base_image.height);
-      this.setState(() => ({
-        currentImage: index,
+      this.setState({
+        currentCard: index,
         currentImageBase64: base64,
+        isModalOpen: true,
         ratio: ratio,
-        ...initialState
-      }), () => this.toggle());
+        title: this.props.notesArray[index].title,
+        body: this.props.notesArray[index].body,
+        description: this.props.notesArray[index].description
+      })
+      console.log(this.state)
     }
 
     async getBase64Image(url: any) {
@@ -101,54 +84,77 @@ class NotesView extends React.Component <IProps, IState> {
     }));
   }
 
+  refresh = () => {
+    this.setState({
+      ...initialState
+    })
+  }
 
+  confirmDelete = () => {
+    confirmAlert({
+      title: 'Confirm to delete',
+      message: 'Are you sure to delete this file?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            delete this.props.notesArray[this.state.currentCard]
+            this.refresh()
+            alert('File deleted')
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            alert('Cancelled')
+          }
+        }
+      ]
+    });
+  };
+
+  
 
 render() {
-    const textStyle = {
-      fontFamily: "helvetica",
-      fontSize: "50px",
-      textTransform: "none",
-      fill: "#FFF",
-      stroke: "#000",
-      userSelect: "none"
-    }
-
     return (
       <div>
         <div className="main-content">
           <div className="content">
-            {debugDBImages.map((image, index) => (
-              <div className="image-holder" key={image.src}>
-                <span 
-                  className="bottom-caption"
+            {items.map((textArea, index) => (
+              <div className="image-holder" key={textArea.time}>
+                <p >{this.props.notesArray[index].date}</p>
+                <p>{this.props.notesArray[index].description}</p>
+                <span className="bottom-caption"
                   onClick={() => this.openImage(index)}
-                >Test Note title</span>
-                <p 
-                  id='clickable test'
-                  
-                
-                
-                >test note body elemtns abcd test test test</p>
+                >
+                  {this.props.notesArray[index].title}
+                </span>
+                <p id='note-title'>
+                </p>
               </div>
             ))}
           </div>
         </div>
         <Modal className="meme-modal" isOpen={this.state.isModalOpen} size="lg">
-          <ModalHeader toggle={this.toggle}>Make-a-Meme</ModalHeader>
-          <ModalBody>
-              <p id='note-body'>test note text</p>
-            <div className="meme-text-input">
-              <button onClick={() => console.log("button clicked")} className="btn btn-primary">Download</button>
-            </div>
+          <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
+          <ModalBody id='modal-body'>
+              <p id='note-body'>
+                {this.state.description}
+              </p>
+              <button onClick={()=> 
+                {
+                  this.confirmDelete()
+                  this.toggle()
+                  
+                }
+              }
+              >delete note</button>
+
           </ModalBody>
         </Modal>
       </div>
     )
   }
-  
- 
-
-
 }
 
 export default NotesView;
