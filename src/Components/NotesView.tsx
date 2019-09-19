@@ -1,10 +1,13 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
+import { TextField, Button} from '@material-ui/core';
+import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 interface IState{
   isModalOpen: boolean,
+  isCreationModalOpen: boolean,
   title: String,
   description: String,
   body: string,
@@ -16,14 +19,23 @@ interface IState{
   key: string
 }
 
+interface Values {
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  src: string;
+}
+
 const initialState = {
   isModalOpen: false,
-  title: "no title",
-  description: "no description",
-  body: "no body",
+  isCreationModalOpen: false,
+  title: "Enter Title",
+  description: "Enter Description",
+  body: "depreciated",
   date: "not long ago?",
   time: 0,
-  currentCard: 0,
+  currentCard: -1,
   currentImageBase64: 0,
   ratio: 1,
   key: "textArea.time"
@@ -34,21 +46,65 @@ interface IProps{
 
 }
 
-var items: { map: (arg0: (textArea: any, index: any) => JSX.Element) => React.ReactNode; };
+var items = [
+  {
+    title: "test note title 1",
+    body: "test body 1",
+    description: "test note description 1",
+    date: "1st of testuary",
+    time: "11am",
+    noteID: "n1",
+    src: "https://i.imgur.com/o3j9qSk.jpg"
+},
+{
+    title: "test note title 2",
+    body: "test body 2",
+    description: `test note description 2, 
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum blandit rhoncus egestas. Donec sapien ante, aliquam cursus diam gravida, varius pharetra sapien. Donec non pharetra velit. Morbi nec suscipit orci. Nunc dui tortor, pulvinar sit amet mattis ac, aliquam ut dui. Donec aliquet ut turpis maximus mollis. Sed pellentesque ligula at neque rhoncus pretium. Donec tincidunt magna neque, imperdiet suscipit justo sodales ac.
+
+Aenean tempus, justo ac dictum mollis, urna nibh venenatis orci, non vulputate dolor massa a mauris. Morbi egestas interdum massa, ac vestibulum ante. Nullam id luctus mi. Nam cursus porttitor mauris. Cras a quam sit amet mi sagittis interdum eu nec odio. Integer ex odio, feugiat consectetur libero eu, auctor condimentum neque. In facilisis augue nec dui faucibus, a congue nulla iaculis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque aliquam vestibulum ipsum. Nullam tempus viverra commodo. Maecenas aliquet nisl a odio bibendum, et pulvinar lorem fringilla. Curabitur vitae libero leo. Fusce facilisis tortor sed ullamcorper suscipit.
+
+Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed lectus suscipit, nec aliquam dolor malesuada. Nam semper vitae felis a vestibulum. Quisque vitae facilisis felis, id tincidunt dolor. Vestibulum blandit, ipsum a egestas porta, lorem felis fermentum turpis, ultrices imperdiet eros mauris vitae mauris. Nunc vitae sem at leo elementum fermentum non nec ante. Morbi consequat quam urna, at eleifend arcu auctor quis.
+    
+    `,
+    date: "2nd of testuary",
+    time: "12am",
+    noteID: "n2",
+    src: "https://i.imgur.com/0kCZcQv.jpg"
+},
+{
+    title: "test note title 3",
+    body: "test body 3",
+    description: "test note description 3",
+    date: "3rd of testuary",
+    time: "3pm",
+    noteID: "n3",
+    src: "https://i.imgur.com/8SFJ8Xl.jpg" 
+},
+{
+    title: "test note title 4",
+    body: "test body 4",
+    description: "test note description 4",
+    date: "4th of testuary",
+    time: "4pm",
+    noteID: "n4",
+    src: "https://i.imgur.com/EhdZZ0R.jpg"
+}
+];
 
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
-    items = this.props.notesArray;
+
 
     this.state = {
-        ...initialState
+        ...initialState,
     }
   }
 
   async openImage(index:number) {
     console.log(index);
-    const image = this.props.notesArray[index];
+    const image = items[index];
       const base_image = new Image();
       base_image.src = image.src;
       const base64 = await this.getBase64Image(image.src);
@@ -58,9 +114,9 @@ class NotesView extends React.Component <IProps, IState> {
         currentImageBase64: base64,
         isModalOpen: true,
         ratio: ratio,
-        title: this.props.notesArray[index].title,
-        body: this.props.notesArray[index].body,
-        description: this.props.notesArray[index].description
+        title: items[index].title,
+        body: items[index].body,
+        description: items[index].description
       })
       console.log(this.state)
     }
@@ -98,7 +154,7 @@ class NotesView extends React.Component <IProps, IState> {
         {
           label: 'Yes',
           onClick: () => {
-            delete this.props.notesArray[this.state.currentCard]
+            delete items[this.state.currentCard]
             this.refresh()
             alert('File deleted')
           }
@@ -113,21 +169,59 @@ class NotesView extends React.Component <IProps, IState> {
     });
   };
 
+  toggleCreationModal = () =>{
+    this.setState((prevState) => ({
+      isCreationModalOpen: !prevState.isCreationModalOpen
+    }));
+  }
+
+  openCreationModal(){
+    this.refresh()
+    this.toggleCreationModal()
+    
+
+  }
+
+  saveNote(values: Values){
+    items.push(
+      {
+        title: values.title,
+        description: values.description,
+        body: "depreciated",
+        date: "not long ago?",
+        time: "0",
+        noteID: "unassigned",
+        src: "./logo192.png"
+      });
+      this.refresh()
+  }
+
   
 
 render() {
     return (
+      
       <div>
+
+        <button className='btn-primary' 
+            onClick={()=> {
+              this.openCreationModal()
+              console.log(this.state)
+              console.log("working")
+          }
+        }>
+
+        </button>
         <div className="main-content">
           <div className="content">
             {items.map((textArea, index) => (
-              <div className="image-holder" key={textArea.time}>
-                <p >{this.props.notesArray[index].date}</p>
-                <p>{this.props.notesArray[index].description}</p>
+              <div className="image-holder" key={textArea.title}>
+                <p >{items[index].date}</p>
+                <p>{items[index].description}</p>
                 <span className="bottom-caption"
                   onClick={() => this.openImage(index)}
                 >
-                  {this.props.notesArray[index].title}
+                  {items[index].title}
                 </span>
                 <p id='note-title'>
                 </p>
@@ -149,6 +243,54 @@ render() {
                 }
               }
               >delete note</button>
+
+          </ModalBody>
+        </Modal>
+
+        <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
+          <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
+          <ModalBody id='modal-body'>
+
+            
+          <Formik initialValues={{title: '', description: '', date: '', time: '', src: ''}} 
+            onSubmit={values => {
+              this.saveNote(values)
+            }}
+          > 
+          {({values, handleChange, handleBlur}) => 
+          <Form>
+          <div>
+              <TextField 
+              placeholder="Note title"
+              name="title" 
+              value={values.title} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <div>
+          <TextField 
+              placeholder="Add note"
+              name="description" 
+              value={values.description} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <pre>
+              {JSON.stringify(values, null, 2)}
+          </pre>
+          <Button type="submit"></Button>
+        </Form>
+    
+        }</Formik>
+              <button onClick={()=> 
+                {
+                  this.confirmDelete()
+                  this.toggleCreationModal()
+                }
+              }
+              >Delete Note</button>
 
           </ModalBody>
         </Modal>
