@@ -1,3 +1,49 @@
+
+#comment_form input, #comment_form textarea{
+	border: 4px solid rgba(0,0,0,0.1);
+    padding: 8px 10px;
+    font-family: sans-serif;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	outline: 0;
+}
+#comment_form textarea {
+  width: 350px; /* change this for the width of the text area*/
+}
+
+#comment_form button[type="submit"] {
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+#comment_form button[type="submit"]:hover {
+  border: 1px solid #bbb;
+  background-color: #999;
+}
+
+#comment_form button[type="submit"]:active {
+	border: 1px solid #999;
+}
+
+#comment_form div {
+  margin-bottom: 8px;
+  margin: 10px;
+}
+
+/*comment*/
+#title, #description, #comments{
+	border: 4px solid rgba(0,0,0,0.1);
+	padding: 8px 10px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	outline: 0;
+}
 @import url('https://fonts.googleapis.com/css?family=Arial:400,400i,700,700i');
 
 html, body {
@@ -182,3 +228,4 @@ button {
   font-size: 12px;
   cursor: pointer;
 }
+
