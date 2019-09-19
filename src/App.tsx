@@ -52,6 +52,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
 const App: React.FC = () => {
   return (
     <div>
+      <div className='App-header'> Revise with me </div>
+
       <NotesView notesArray={testNotes}></NotesView>
     </div>
   );
