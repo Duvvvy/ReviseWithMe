@@ -26,5 +26,3 @@ export const CommentListItem: FunctionComponent<Props> = ({comment, onDelete}) =
         </div>
     );
 };
-
-export default CommentListItem
