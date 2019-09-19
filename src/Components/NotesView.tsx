@@ -1,8 +1,7 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-
-
-
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 interface IState{
   isModalOpen: boolean,
@@ -13,7 +12,8 @@ interface IState{
   time: number,
   currentCard: number,
   currentImageBase64: any,
-  ratio: number
+  ratio: number,
+  key: string
 }
 
 const initialState = {
@@ -25,7 +25,8 @@ const initialState = {
   time: 0,
   currentCard: 0,
   currentImageBase64: 0,
-  ratio: 1
+  ratio: 1,
+  key: "textArea.time"
 }
 
 interface IProps{
@@ -83,7 +84,36 @@ class NotesView extends React.Component <IProps, IState> {
     }));
   }
 
+  refresh = () => {
+    this.setState({
+      ...initialState
+    })
+  }
 
+  confirmDelete = () => {
+    confirmAlert({
+      title: 'Confirm to delete',
+      message: 'Are you sure to delete this file?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            delete this.props.notesArray[this.state.currentCard]
+            this.refresh()
+            alert('File deleted')
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            alert('Cancelled')
+          }
+        }
+      ]
+    });
+  };
+
+  
 
 render() {
     return (
@@ -91,7 +121,7 @@ render() {
         <div className="main-content">
           <div className="content">
             {items.map((textArea, index) => (
-              <div className="image-holder" key={textArea.title}>
+              <div className="image-holder" key={textArea.time}>
                 <p >{this.props.notesArray[index].date}</p>
                 <p>{this.props.notesArray[index].description}</p>
                 <span className="bottom-caption"
@@ -113,11 +143,13 @@ render() {
               </p>
               <button onClick={()=> 
                 {
-                  delete this.props.notesArray[this.state.currentCard]
+                  this.confirmDelete()
                   this.toggle()
+                  
                 }
               }
               >delete note</button>
+
           </ModalBody>
         </Modal>
       </div>
