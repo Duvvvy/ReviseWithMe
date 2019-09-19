@@ -1,9 +1,8 @@
 import React from 'react';
 import './App.css';
+
 import NotesView from "./Components/NotesView";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
 
 var testNotes = [
   {
