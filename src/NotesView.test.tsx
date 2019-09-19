@@ -1,8 +1,7 @@
 import React from 'react';
-import './App.css';
+import ReactDOM from 'react-dom';
+import NotesView from './Components/NotesView';
 
-import NotesView from "./Components/NotesView";
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 var testNotes = [
   {
@@ -49,12 +48,9 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/EhdZZ0R.jpg"
 }
 ];
-const App: React.FC = () => {
-  return (
-    <div>
-      <NotesView notesArray={testNotes}></NotesView>
-    </div>
-  );
-}
 
-export default App;
+it('renders without crashing', () => {
+  const div = document.createElement('div');
+  ReactDOM.render(<NotesView notesArray={testNotes} />, div);
+  ReactDOM.unmountComponentAtNode(div);
+});
