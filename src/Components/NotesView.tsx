@@ -1,5 +1,15 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
+import { string } from 'prop-types';
+
+const sorted = "";
+export function setSortState(sort:String) {
+  const sorting = sort;
+  prompt("sorting something");
+  return(
+    sorting
+  )
+}
 
 const debugDBImages = [
   {
@@ -112,6 +122,7 @@ render() {
       stroke: "#000",
       userSelect: "none"
     }
+    
 
     return (
       <div>
@@ -138,7 +149,8 @@ render() {
           <ModalBody>
               <p id='note-body'>test note text</p>
             <div className="meme-text-input">
-              <button onClick={() => console.log("button clicked")} className="btn btn-primary">Download</button>
+              <textarea></textarea>
+              <button onClick={() => console.log("button click  ed")} className="btn btn-primary">ADD</button>
             </div>
           </ModalBody>
         </Modal>
