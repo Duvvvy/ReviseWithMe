@@ -3,6 +3,10 @@ import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
+import {Comment} from "../model/Comment";
+import {NewComment} from "../Components/NewComment";
+import {CommentsList} from "../Components/CommentsList";
+
 interface IState{
   isModalOpen: boolean,
   title: String,
@@ -13,7 +17,9 @@ interface IState{
   currentCard: number,
   currentImageBase64: any,
   ratio: number,
-  key: string
+  key: string,
+  newComment: Comment,
+  comments: Comment[]
 }
 
 const initialState = {
@@ -26,7 +32,13 @@ const initialState = {
   currentCard: 0,
   currentImageBase64: 0,
   ratio: 1,
-  key: "textArea.time"
+  key: "textArea.time",
+  newComment: {
+    id: 0,
+    title: "",
+    description: ""
+  },
+  comments: []
 }
 
 interface IProps{
@@ -45,6 +57,45 @@ class NotesView extends React.Component <IProps, IState> {
         ...initialState
     }
   }
+
+  private addComment = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    this.setState(previousState => ({
+      newComment: {
+        id: previousState.newComment.id + 1,
+        title: "",
+        description: ""
+      },
+      comments: [...previousState.comments, previousState.newComment]
+    }));
+  };
+
+  private handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({
+      newComment: {
+        ...this.state.newComment,
+        title: event.target.value
+      }
+    });
+  };
+
+  private handleCommentChange2 = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    this.setState({
+      newComment: {
+        ...this.state.newComment,
+        description: event.target.value
+      }
+    });
+  };
+
+  private deleteComment = (commentToDelete: Comment) => {
+    this.setState(previousState => ({
+      comments: [
+      ...previousState.comments.filter(comment => comment.id !== commentToDelete.id)
+      ]
+    }));
+  };
 
   async openImage(index:number) {
     console.log(index);
@@ -122,8 +173,8 @@ render() {
           <div className="content">
             {items.map((textArea, index) => (
               <div className="image-holder" key={textArea.time}>
-                <p >{this.props.notesArray[index].date}</p>
-                <p>{this.props.notesArray[index].description}</p>
+                <p>{this.props.notesArray[index].date}</p>
+                <p id='note-body'>{this.props.notesArray[index].description}</p>
                 <span className="bottom-caption"
                   onClick={() => this.openImage(index)}
                 >
@@ -138,18 +189,30 @@ render() {
         <Modal className="meme-modal" isOpen={this.state.isModalOpen} size="lg">
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
-              <p id='note-body'>
+              <div className="description">
+              <p>
                 {this.state.description}
               </p>
-              <button onClick={()=> 
-                {
+              </div>
+              <div className = "comment-in-note">
+                <NewComment
+                  comment={this.state.newComment}
+                  onAdd={this.addComment}
+                  onChange={this.handleCommentChange}
+                  onChange2={this.handleCommentChange2}
+                />
+                <CommentsList comments={this.state.comments} onDelete={this.deleteComment} />
+              </div>
+
+              <div className= 'delete_note'>
+                <button type='submit' onClick={()=> 
+                  {
                   this.confirmDelete()
                   this.toggle()
-                  
+                  }
                 }
-              }
-              >delete note</button>
-
+                >delete note</button>
+              </div>
           </ModalBody>
         </Modal>
       </div>
