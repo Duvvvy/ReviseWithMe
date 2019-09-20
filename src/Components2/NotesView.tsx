@@ -5,8 +5,8 @@ import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {Comment} from "../model/Comment";	
-import {NewComment} from "../Components/NewComment";	
-import {CommentsList} from "../Components/CommentsList";
+import {NewComment} from "./NewComment";	
+import {CommentsList} from "./CommentsList";
 
 
 interface IState{
@@ -31,7 +31,7 @@ interface Values {
   date: string;
   time: string;
   src: string;
-  comments: any[];
+  comments: any[]
 }
 
 const initialState = {
@@ -47,7 +47,7 @@ const initialState = {
   ratio: 1,
   key: "textArea.time",
   newComment: {	
-    id: -1,	
+    id: 0,	
     title: "",	
     description: ""	
   },	
@@ -109,6 +109,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
 }
 ];
 
+
+
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
@@ -121,17 +123,16 @@ class NotesView extends React.Component <IProps, IState> {
 
   private addComment = (event: React.FormEvent<HTMLFormElement>) => {	
     event.preventDefault();	
-
+  
     this.setState(previousState => ({	
       newComment: {	
         id: previousState.newComment.id + 1,	
         title: "",	
-        description: "",
+        description: ""	
       },	
-      comments: [previousState.newComment, ...previousState.comments, ]	
-      
-    }));
-    items[this.state.currentCard].comments = this.state.comments	
+      comments: [...previousState.comments, previousState.newComment]	
+    }));	
+    items[this.state.currentCard].comments =this.state.comments
   };	
   
   private handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {	
@@ -238,6 +239,8 @@ class NotesView extends React.Component <IProps, IState> {
   openCreationModal(){
     this.refresh()
     this.toggleCreationModal()
+    
+
   }
 
   saveNote(values: Values){
@@ -326,6 +329,7 @@ render() {
                 {
                   this.confirmDelete()
                   this.toggle()
+                  
                 }
               }
               >Delete note</button>
@@ -348,9 +352,7 @@ render() {
           <ModalBody id='modal-body'>
 
             
-
           <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: '', comments: this.state.comments}} 
-
             onSubmit={values => {
               this.saveNote(values)
             }}

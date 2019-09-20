@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import NotesView from './Components/NotesView';
+import NotesView from './Components2/NotesView';
 import {mount} from "enzyme";
 
 
