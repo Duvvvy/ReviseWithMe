@@ -11,8 +11,8 @@ import {CommentsList} from "../Components/CommentsList";
 interface IState{
   isModalOpen: boolean,
   isCreationModalOpen: boolean,
-  title: String,
-  description: String,
+  title: string,
+  description: string,
   body: string,
   date: String,
   time: number,
@@ -305,7 +305,13 @@ render() {
                 }
               }
               >Delete note</button>
-
+              <button className="btn-primary" onClick={()=>
+                {
+                  this.toggle();
+                  this.toggleCreationModal();
+                }
+              }
+              >Edit Note</button>
           </ModalBody>
 
 
@@ -318,7 +324,7 @@ render() {
           <ModalBody id='modal-body'>
 
             
-          <Formik initialValues={{title: '', description: '', date: '', time: '', src: ''}} 
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: ''}} 
             onSubmit={values => {
               this.saveNote(values)
             }}
