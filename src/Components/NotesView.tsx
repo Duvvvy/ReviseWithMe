@@ -8,11 +8,12 @@ import {Comment} from "../model/Comment";
 import {NewComment} from "../Components/NewComment";	
 import {CommentsList} from "../Components/CommentsList";
 
+
 interface IState{
   isModalOpen: boolean,
   isCreationModalOpen: boolean,
-  title: String,
-  description: String,
+  title: string,
+  description: string,
   body: string,
   date: String,
   time: number,
@@ -254,13 +255,31 @@ class NotesView extends React.Component <IProps, IState> {
       this.refresh()
   }
 
-  
+  saveToCookie(arr:any){
+    var json_str = JSON.stringify(arr);
+    //Cookies.name('mycookie');
+    document.cookie = "myCookie = " + json_str;
+    console.log("saved")
+  }
+
+  readFromCookie(){
+
+    var value = document.cookie;
+    alert(value);
+    //var array = JSON.parse('"'+value+'"');
+    //alert(array);
+      
+
+
+  }
 
 render() {
     return (
       
       <div>
 
+        <Button onClick={()=>{this.readFromCookie()}}>Load from cookie</Button>
+        <Button onClick={()=>{this.saveToCookie(items)}}>Save to cookie</Button>
         <button className='btn-primary'
             onClick={()=> {
               this.openCreationModal()
@@ -310,7 +329,13 @@ render() {
                 }
               }
               >Delete note</button>
-
+              <button className="btn-primary" onClick={()=>
+                {
+                  this.toggle();
+                  this.toggleCreationModal();
+                }
+              }
+              >Edit Note</button>
           </ModalBody>
 
 
@@ -323,7 +348,9 @@ render() {
           <ModalBody id='modal-body'>
 
             
-          <Formik initialValues={{title: '', description: '', date: '', time: '', src: '', comments: this.state.comments}} 
+
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: '', comments: this.state.comments}} 
+
             onSubmit={values => {
               this.saveNote(values)
             }}
@@ -351,7 +378,12 @@ render() {
           <pre>
               {JSON.stringify(values, null, 2)}
           </pre>
-          <Button className="btn-primary" type="submit">Confirm</Button>
+          <Button className="btn-primary" type="submit" onClick={()=>
+          {
+            delete items[this.state.currentCard]
+          }
+        }
+          >Confirm</Button>
         </Form>
     
         }</Formik>
