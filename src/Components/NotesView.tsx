@@ -8,6 +8,7 @@ import {Comment} from "../model/Comment";
 import {NewComment} from "../Components/NewComment";	
 import {CommentsList} from "../Components/CommentsList";
 
+
 interface IState{
   isModalOpen: boolean,
   isCreationModalOpen: boolean,
@@ -248,13 +249,31 @@ class NotesView extends React.Component <IProps, IState> {
       this.refresh()
   }
 
-  
+  saveToCookie(arr:any){
+    var json_str = JSON.stringify(arr);
+    //Cookies.name('mycookie');
+    document.cookie = "myCookie = " + json_str;
+    console.log("saved")
+  }
+
+  readFromCookie(){
+
+    var value = document.cookie;
+    alert(value);
+    //var array = JSON.parse('"'+value+'"');
+    //alert(array);
+      
+
+
+  }
 
 render() {
     return (
       
       <div>
 
+        <Button onClick={()=>{this.readFromCookie()}}>Load from cookie</Button>
+        <Button onClick={()=>{this.saveToCookie(items)}}>Save to cookie</Button>
         <button className='btn-primary'
             onClick={()=> {
               this.openCreationModal()
