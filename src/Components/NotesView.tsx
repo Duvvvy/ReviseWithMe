@@ -4,6 +4,9 @@ import { TextField, Button} from '@material-ui/core';
 import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import {Comment} from "../model/Comment";	
+import {NewComment} from "../Components/NewComment";	
+import {CommentsList} from "../Components/CommentsList";
 
 interface IState{
   isModalOpen: boolean,
@@ -16,7 +19,9 @@ interface IState{
   currentCard: number,
   currentImageBase64: any,
   ratio: number,
-  key: string
+  key: string,
+  newComment: Comment,	
+  comments: Comment[]
 }
 
 interface Values {
@@ -38,7 +43,13 @@ const initialState = {
   currentCard: -1,
   currentImageBase64: 0,
   ratio: 1,
-  key: "textArea.time"
+  key: "textArea.time",
+  newComment: {	
+    id: 0,	
+    title: "",	
+    description: ""	
+  },	
+  comments: []
 }
 
 interface IProps{
@@ -92,6 +103,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
 }
 ];
 
+
+
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
@@ -101,6 +114,45 @@ class NotesView extends React.Component <IProps, IState> {
         ...initialState,
     }
   }
+
+  private addComment = (event: React.FormEvent<HTMLFormElement>) => {	
+    event.preventDefault();	
+  
+    this.setState(previousState => ({	
+      newComment: {	
+        id: previousState.newComment.id + 1,	
+        title: "",	
+        description: ""	
+      },	
+      comments: [...previousState.comments, previousState.newComment]	
+    }));	
+  };	
+  
+  private handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {	
+    this.setState({	
+      newComment: {	
+        ...this.state.newComment,	
+        title: event.target.value	
+      }	
+    });	
+  };	
+  
+  private handleCommentChange2 = (event: React.ChangeEvent<HTMLTextAreaElement>) => {	
+    this.setState({	
+      newComment: {	
+        ...this.state.newComment,	
+        description: event.target.value	
+      }	
+    });	
+  };	
+  
+  private deleteComment = (commentToDelete: Comment) => {	
+    this.setState(previousState => ({	
+      comments: [	
+      ...previousState.comments.filter(comment => comment.id !== commentToDelete.id)	
+      ]	
+    }));	
+  };
 
   async openImage(index:number) {
     console.log(index);
@@ -234,6 +286,17 @@ render() {
               <p id='note-body'>
                 {this.state.description}
               </p>
+              <div className = "comment-in-note">
+                <NewComment
+                comment={this.state.newComment}
+                onAdd={this.addComment}
+                onChange={this.handleCommentChange}
+                onChange2={this.handleCommentChange2}
+                />
+                <CommentsList comments={this.state.comments}
+                onDelete={this.deleteComment} />
+              </div>
+
               <button className="btn-primary" onClick={()=> 
                 {
                   this.confirmDelete()
@@ -244,6 +307,10 @@ render() {
               >Delete note</button>
 
           </ModalBody>
+
+
+
+
         </Modal>
 
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
