@@ -12,6 +12,7 @@ import {CommentsList} from "./CommentsList";
 interface IState{
   isModalOpen: boolean,
   isCreationModalOpen: boolean,
+  isHighlighted: boolean,
   title: string,
   description: string,
   body: string,
@@ -37,6 +38,7 @@ interface Values {
 const initialState = {
   isModalOpen: false,
   isCreationModalOpen: false,
+  isHighlighted: false,
   title: "Enter Title",
   description: "Enter Description",
   body: "depreciated",
@@ -119,6 +121,7 @@ class NotesView extends React.Component <IProps, IState> {
     this.state = {
         ...initialState,
     }
+    this.highlightClick = this.highlightClick.bind(this);
   }
 
   private addComment = (event: React.FormEvent<HTMLFormElement>) => {	
@@ -275,6 +278,32 @@ class NotesView extends React.Component <IProps, IState> {
 
 
   }
+  highlightClick(event:any)  {
+    if (this.state.isHighlighted)  {
+    this.setState({
+      isHighlighted:false,
+    });
+  }
+  else  {
+    this.setState({
+      isHighlighted:true,
+    });
+  }
+  }
+  highlightText()  {
+    
+    if (this.state.isHighlighted)  {
+    return (
+
+      <b>{this.state.description}</b>      
+    )
+    }
+    else {
+      return(
+        <div>{this.state.description}</div>
+        )
+   }
+  }
 
 render() {
     return (
@@ -386,6 +415,12 @@ render() {
           }
         }
           >Confirm</Button>
+          <Button className="btn-primary" 
+            onClick={ this.highlightClick }
+          >Highlight</Button>
+          <div>
+            {this.highlightText()}
+          </div>
         </Form>
     
         }</Formik>
