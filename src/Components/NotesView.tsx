@@ -4,16 +4,16 @@ import { TextField, Button} from '@material-ui/core';
 import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-
-import {Comment} from "../model/Comment";
-import {NewComment} from "../Components/NewComment";
+import {Comment} from "../model/Comment";	
+import {NewComment} from "../Components/NewComment";	
 import {CommentsList} from "../Components/CommentsList";
+
 
 interface IState{
   isModalOpen: boolean,
   isCreationModalOpen: boolean,
-  title: String,
-  description: String,
+  title: string,
+  description: string,
   body: string,
   date: String,
   time: number,
@@ -21,7 +21,7 @@ interface IState{
   currentImageBase64: any,
   ratio: number,
   key: string,
-  newComment: Comment,
+  newComment: Comment,	
   comments: Comment[]
 }
 
@@ -45,11 +45,11 @@ const initialState = {
   currentImageBase64: 0,
   ratio: 1,
   key: "textArea.time",
-  newComment: {
-    id: 0,
-    title: "",
-    description: ""
-  },
+  newComment: {	
+    id: 0,	
+    title: "",	
+    description: ""	
+  },	
   comments: []
 }
 
@@ -104,6 +104,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
 }
 ];
 
+
+
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
@@ -114,43 +116,43 @@ class NotesView extends React.Component <IProps, IState> {
     }
   }
 
-  private addComment = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    this.setState(previousState => ({
-      newComment: {
-        id: previousState.newComment.id + 1,
-        title: "",
-        description: ""
-      },
-      comments: [...previousState.comments, previousState.newComment]
-    }));
-  };
-
-  private handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      newComment: {
-        ...this.state.newComment,
-        title: event.target.value
-      }
-    });
-  };
-
-  private handleCommentChange2 = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    this.setState({
-      newComment: {
-        ...this.state.newComment,
-        description: event.target.value
-      }
-    });
-  };
-
-  private deleteComment = (commentToDelete: Comment) => {
-    this.setState(previousState => ({
-      comments: [
-      ...previousState.comments.filter(comment => comment.id !== commentToDelete.id)
-      ]
-    }));
+  private addComment = (event: React.FormEvent<HTMLFormElement>) => {	
+    event.preventDefault();	
+  
+    this.setState(previousState => ({	
+      newComment: {	
+        id: previousState.newComment.id + 1,	
+        title: "",	
+        description: ""	
+      },	
+      comments: [...previousState.comments, previousState.newComment]	
+    }));	
+  };	
+  
+  private handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {	
+    this.setState({	
+      newComment: {	
+        ...this.state.newComment,	
+        title: event.target.value	
+      }	
+    });	
+  };	
+  
+  private handleCommentChange2 = (event: React.ChangeEvent<HTMLTextAreaElement>) => {	
+    this.setState({	
+      newComment: {	
+        ...this.state.newComment,	
+        description: event.target.value	
+      }	
+    });	
+  };	
+  
+  private deleteComment = (commentToDelete: Comment) => {	
+    this.setState(previousState => ({	
+      comments: [	
+      ...previousState.comments.filter(comment => comment.id !== commentToDelete.id)	
+      ]	
+    }));	
   };
 
   async openImage(index:number) {
@@ -247,13 +249,31 @@ class NotesView extends React.Component <IProps, IState> {
       this.refresh()
   }
 
-  
+  saveToCookie(arr:any){
+    var json_str = JSON.stringify(arr);
+    //Cookies.name('mycookie');
+    document.cookie = "myCookie = " + json_str;
+    console.log("saved")
+  }
+
+  readFromCookie(){
+
+    var value = document.cookie;
+    alert(value);
+    //var array = JSON.parse('"'+value+'"');
+    //alert(array);
+      
+
+
+  }
 
 render() {
     return (
       
       <div>
 
+        <Button onClick={()=>{this.readFromCookie()}}>Load from cookie</Button>
+        <Button onClick={()=>{this.saveToCookie(items)}}>Save to cookie</Button>
         <button className='btn-primary'
             onClick={()=> {
               this.openCreationModal()
@@ -265,9 +285,9 @@ render() {
         <div className="main-content">
           <div className="content">
             {items.map((textArea, index) => (
-              <div className="image-holder" key={textArea.time}>
-                <p>{this.props.notesArray[index].date}</p>
-                <p id='note-body'>{this.props.notesArray[index].description}</p>
+              <div className="image-holder" key={textArea.title}>
+                <p >{items[index].date}</p>
+                <p>{items[index].description}</p>
                 <span className="bottom-caption"
                   onClick={() => this.openImage(index)}
                 >
@@ -282,30 +302,92 @@ render() {
         <Modal className="meme-modal" isOpen={this.state.isModalOpen} size="lg">
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
-              <div className="description">
-              <p>
+              <p id='note-body'>
                 {this.state.description}
               </p>
-              </div>
               <div className = "comment-in-note">
                 <NewComment
-                  comment={this.state.newComment}
-                  onAdd={this.addComment}
-                  onChange={this.handleCommentChange}
-                  onChange2={this.handleCommentChange2}
+                comment={this.state.newComment}
+                onAdd={this.addComment}
+                onChange={this.handleCommentChange}
+                onChange2={this.handleCommentChange2}
                 />
-                <CommentsList comments={this.state.comments} onDelete={this.deleteComment} />
+                <CommentsList comments={this.state.comments}
+                onDelete={this.deleteComment} />
               </div>
 
-              <div className= 'delete_note'>
-                <button type='submit' onClick={()=> 
-                  {
+              <button className="btn-primary" onClick={()=> 
+                {
                   this.confirmDelete()
                   this.toggle()
-                  }
+                  
                 }
-                >delete note</button>
-              </div>
+              }
+              >Delete note</button>
+              <button className="btn-primary" onClick={()=>
+                {
+                  this.toggle();
+                  this.toggleCreationModal();
+                }
+              }
+              >Edit Note</button>
+          </ModalBody>
+
+
+
+
+        </Modal>
+
+        <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
+          <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
+          <ModalBody id='modal-body'>
+
+            
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: ''}} 
+            onSubmit={values => {
+              this.saveNote(values)
+            }}
+          > 
+          {({values, handleChange, handleBlur}) => 
+          <Form>
+          <div>
+              <TextField 
+              placeholder="Note title"
+              name="title" 
+              value={values.title} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <div>
+          <TextField 
+              placeholder="Add note"
+              name="description" 
+              value={values.description} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <pre>
+              {JSON.stringify(values, null, 2)}
+          </pre>
+          <Button className="btn-primary" type="submit" onClick={()=>
+          {
+            delete items[this.state.currentCard]
+          }
+        }
+          >Confirm</Button>
+        </Form>
+    
+        }</Formik>
+              <button className="btn-primary" onClick={()=> 
+                {
+                  this.confirmDelete()
+                  this.toggleCreationModal()
+                }
+              }
+              >Delete Note</button>
+
           </ModalBody>
         </Modal>
       </div>
