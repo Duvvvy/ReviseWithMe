@@ -10,7 +10,8 @@ interface Props {
 
 export const CommentsList: FunctionComponent<Props> = ({comments, onDelete}) => (
     <ul>
-        {comments.map(comment => (
+        {
+            (comments.reverse()).map((comment, index) => (
             <CommentListItem comment={comment} onDelete={onDelete} />
         ))}
     </ul>

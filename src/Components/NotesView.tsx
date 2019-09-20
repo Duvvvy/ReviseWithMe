@@ -22,7 +22,7 @@ interface IState{
   ratio: number,
   key: string,
   newComment: Comment,	
-  comments: Comment[]
+  comments: any[]
 }
 
 interface Values {
@@ -31,6 +31,7 @@ interface Values {
   date: string;
   time: string;
   src: string;
+  comments: any[];
 }
 
 const initialState = {
@@ -46,7 +47,7 @@ const initialState = {
   ratio: 1,
   key: "textArea.time",
   newComment: {	
-    id: 0,	
+    id: -1,	
     title: "",	
     description: ""	
   },	
@@ -66,7 +67,8 @@ var items = [
     date: "1st of testuary",
     time: "11am",
     noteID: "n1",
-    src: "https://i.imgur.com/o3j9qSk.jpg"
+    src: "https://i.imgur.com/o3j9qSk.jpg",
+    comments: [{}]
 },
 {
     title: "test note title 2",
@@ -82,7 +84,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     date: "2nd of testuary",
     time: "12am",
     noteID: "n2",
-    src: "https://i.imgur.com/0kCZcQv.jpg"
+    src: "https://i.imgur.com/0kCZcQv.jpg",
+    comments: [{}]
 },
 {
     title: "test note title 3",
@@ -91,7 +94,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     date: "3rd of testuary",
     time: "3pm",
     noteID: "n3",
-    src: "https://i.imgur.com/8SFJ8Xl.jpg" 
+    src: "https://i.imgur.com/8SFJ8Xl.jpg",
+    comments: [{}]
 },
 {
     title: "test note title 4",
@@ -100,11 +104,10 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     date: "4th of testuary",
     time: "4pm",
     noteID: "n4",
-    src: "https://i.imgur.com/EhdZZ0R.jpg"
+    src: "https://i.imgur.com/EhdZZ0R.jpg",
+    comments: [{}]
 }
 ];
-
-
 
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
@@ -118,15 +121,17 @@ class NotesView extends React.Component <IProps, IState> {
 
   private addComment = (event: React.FormEvent<HTMLFormElement>) => {	
     event.preventDefault();	
-  
+
     this.setState(previousState => ({	
       newComment: {	
         id: previousState.newComment.id + 1,	
         title: "",	
-        description: ""	
+        description: "",
       },	
-      comments: [...previousState.comments, previousState.newComment]	
-    }));	
+      comments: [previousState.newComment, ...previousState.comments, ]	
+      
+    }));
+    items[this.state.currentCard].comments = this.state.comments	
   };	
   
   private handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {	
@@ -153,6 +158,7 @@ class NotesView extends React.Component <IProps, IState> {
       ...previousState.comments.filter(comment => comment.id !== commentToDelete.id)	
       ]	
     }));	
+    items[this.state.currentCard].comments =this.state.comments
   };
 
   async openImage(index:number) {
@@ -169,7 +175,8 @@ class NotesView extends React.Component <IProps, IState> {
         ratio: ratio,
         title: items[index].title,
         body: items[index].body,
-        description: items[index].description
+        description: items[index].description,
+        comments: items[index].comments
       })
       console.log(this.state)
     }
@@ -231,8 +238,6 @@ class NotesView extends React.Component <IProps, IState> {
   openCreationModal(){
     this.refresh()
     this.toggleCreationModal()
-    
-
   }
 
   saveNote(values: Values){
@@ -244,7 +249,8 @@ class NotesView extends React.Component <IProps, IState> {
         date: `¯\\_(ツ)_/¯`,
         time: "0",
         noteID: "unassigned",
-        src: "./logo192.png"
+        src: "./logo192.png",
+        comments: this.state.comments
       });
       this.refresh()
   }
@@ -320,7 +326,6 @@ render() {
                 {
                   this.confirmDelete()
                   this.toggle()
-                  
                 }
               }
               >Delete note</button>
@@ -343,7 +348,9 @@ render() {
           <ModalBody id='modal-body'>
 
             
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: ''}} 
+
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: '', comments: this.state.comments}} 
+
             onSubmit={values => {
               this.saveNote(values)
             }}
