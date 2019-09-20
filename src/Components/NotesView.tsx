@@ -371,7 +371,12 @@ render() {
           <pre>
               {JSON.stringify(values, null, 2)}
           </pre>
-          <Button className="btn-primary" type="submit">Confirm</Button>
+          <Button className="btn-primary" type="submit" onClick={()=>
+          {
+            delete items[this.state.currentCard]
+          }
+        }
+          >Confirm</Button>
         </Form>
     
         }</Formik>
