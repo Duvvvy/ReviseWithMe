@@ -23,7 +23,8 @@ interface IState{
   ratio: number,
   key: string,
   newComment: Comment,	
-  comments: any[]
+  comments: any[],
+  srcV: string
 }
 
 interface Values {
@@ -32,6 +33,7 @@ interface Values {
   date: string;
   time: string;
   src: string;
+  srcV: string;
   comments: any[]
 }
 
@@ -53,7 +55,8 @@ const initialState = {
     title: "",	
     description: ""	
   },	
-  comments: []
+  comments: [],
+  srcV: ""
 }
 
 interface IProps{
@@ -70,7 +73,8 @@ var items = [
     time: "11am",
     noteID: "n1",
     src: "https://i.imgur.com/o3j9qSk.jpg",
-    comments: [{}]
+    srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
+    comments: []
 },
 {
     title: "test note title 2",
@@ -87,6 +91,7 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     time: "12am",
     noteID: "n2",
     src: "https://i.imgur.com/0kCZcQv.jpg",
+    srcV: "",
     comments: [{}]
 },
 {
@@ -97,7 +102,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     time: "3pm",
     noteID: "n3",
     src: "https://i.imgur.com/8SFJ8Xl.jpg",
-    comments: [{}]
+    srcV: "", 
+    comments: []
 },
 {
     title: "test note title 4",
@@ -107,7 +113,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     time: "4pm",
     noteID: "n4",
     src: "https://i.imgur.com/EhdZZ0R.jpg",
-    comments: [{}]
+    srcV: "", 
+    comments: []
 }
 ];
 
@@ -124,21 +131,23 @@ class NotesView extends React.Component <IProps, IState> {
     this.highlightClick = this.highlightClick.bind(this);
   }
 
-  private addComment = (event: React.FormEvent<HTMLFormElement>) => {	
+  addComment = (event: React.FormEvent<HTMLFormElement>) => {	
     event.preventDefault();	
   
-    this.setState(previousState => ({	
+    this.setState(aState => ({	
       newComment: {	
-        id: previousState.newComment.id + 1,	
+        id: aState.newComment.id + 1,	
         title: "",	
         description: ""	
       },	
-      comments: [...previousState.comments, previousState.newComment]	
+      comments: [...aState.comments, aState.newComment]
     }));	
-    items[this.state.currentCard].comments =this.state.comments
+    console.log("added")
+    items[this.state.currentCard].comments = this.state.comments
+    console.log(items[this.state.currentCard].comments)
   };	
   
-  private handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {	
+  handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {	
     this.setState({	
       newComment: {	
         ...this.state.newComment,	
@@ -147,7 +156,7 @@ class NotesView extends React.Component <IProps, IState> {
     });	
   };	
   
-  private handleCommentChange2 = (event: React.ChangeEvent<HTMLTextAreaElement>) => {	
+  handleCommentChange2 = (event: React.ChangeEvent<HTMLTextAreaElement>) => {	
     this.setState({	
       newComment: {	
         ...this.state.newComment,	
@@ -156,7 +165,7 @@ class NotesView extends React.Component <IProps, IState> {
     });	
   };	
   
-  private deleteComment = (commentToDelete: Comment) => {	
+ deleteComment = (commentToDelete: Comment) => {	
     this.setState(previousState => ({	
       comments: [	
       ...previousState.comments.filter(comment => comment.id !== commentToDelete.id)	
@@ -180,7 +189,8 @@ class NotesView extends React.Component <IProps, IState> {
         title: items[index].title,
         body: items[index].body,
         description: items[index].description,
-        comments: items[index].comments
+        comments: items[index].comments,
+        srcV: items[index].srcV
       })
       console.log(this.state)
     }
@@ -242,8 +252,23 @@ class NotesView extends React.Component <IProps, IState> {
   openCreationModal(){
     this.refresh()
     this.toggleCreationModal()
-    
+  }
 
+  embedingVideo() {
+    var videoID = getId(this.state.srcV)
+    var link = "https://www.youtube.com/embed/"
+    function getId(url: string) {
+      var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      var match = url.match(regExp);
+  
+      if (match && match[2].length == 11) {
+          return match[2];
+      } else {
+          return 'error';
+      }
+    }
+    let fulllink: string = link + videoID
+    return fulllink
   }
 
   saveNote(values: Values){
@@ -256,7 +281,8 @@ class NotesView extends React.Component <IProps, IState> {
         time: "0",
         noteID: "unassigned",
         src: "./logo192.png",
-        comments: this.state.comments
+        comments: this.state.comments,
+        srcV: ""
       });
       this.refresh()
   }
@@ -354,6 +380,18 @@ render() {
                 onDelete={this.deleteComment} />
               </div>
 
+              <div className = "video">
+                <iframe
+                width ="560"
+                height = "315"
+                src = {this.embedingVideo()}
+                frameBorder = "0"
+                allowFullScreen>
+                </iframe>
+
+                {this.state.srcV}
+                </div> 
+
               <button className="btn-primary" onClick={()=> 
                 {
                   this.confirmDelete()
@@ -381,7 +419,7 @@ render() {
           <ModalBody id='modal-body'>
 
             
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: '', comments: this.state.comments}} 
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: '', comments: this.state.comments, srcV: ''}} 
             onSubmit={values => {
               this.saveNote(values)
             }}
