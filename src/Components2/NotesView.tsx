@@ -23,7 +23,8 @@ interface IState{
   ratio: number,
   key: string,
   newComment: Comment,	
-  comments: any[]
+  comments: any[],
+  src: string
 }
 
 interface Values {
@@ -48,6 +49,7 @@ const initialState = {
   currentImageBase64: 0,
   ratio: 1,
   key: "textArea.time",
+  src: "",
   newComment: {	
     id: 0,	
     title: "",	
@@ -116,8 +118,6 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
-
-
     this.state = {
         ...initialState,
     }
@@ -180,7 +180,8 @@ class NotesView extends React.Component <IProps, IState> {
         title: items[index].title,
         body: items[index].body,
         description: items[index].description,
-        comments: items[index].comments
+        comments: items[index].comments,
+        src: items[index].src
       })
       console.log(this.state)
     }
@@ -341,7 +342,9 @@ render() {
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
               <p id='note-body'>
+                <img alt={this.state.src} id='ImageInModal' src={this.state.src}></img>
                 {this.state.description}
+                
               </p>
               <div className = "comment-in-note">
                 <NewComment
