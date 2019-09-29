@@ -7,7 +7,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import {Comment} from "../model/Comment";	
 import {NewComment} from "./NewComment";	
 import {CommentsList} from "./CommentsList";
-
+import { YoutubeViewer } from './YoutubeViewer';
 
 interface IState{
   isModalOpen: boolean,
@@ -24,7 +24,7 @@ interface IState{
   key: string,
   newComment: Comment,	
   comments: any[],
-  srcV: string
+  srcV: string,
 }
 
 interface Values {
@@ -56,7 +56,7 @@ const initialState = {
     description: ""	
   },	
   comments: [],
-  srcV: ""
+  srcV: "",
 }
 
 interface IProps{
@@ -254,23 +254,6 @@ class NotesView extends React.Component <IProps, IState> {
     this.toggleCreationModal()
   }
 
-  embedingVideo() {
-    var videoID = getId(this.state.srcV)
-    var link = "https://www.youtube.com/embed/"
-    function getId(url: string) {
-      var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-      var match = url.match(regExp);
-  
-      if (match && match[2].length == 11) {
-          return match[2];
-      } else {
-          return 'error';
-      }
-    }
-    let fulllink: string = link + videoID
-    return fulllink
-  }
-
   saveNote(values: Values){
     items.push(
       {
@@ -332,6 +315,7 @@ class NotesView extends React.Component <IProps, IState> {
   }
 
 render() {
+
     return (
       
       <div>
@@ -369,6 +353,9 @@ render() {
               <p id='note-body'>
                 {this.state.description}
               </p>
+              
+              <YoutubeViewer srcV={this.state.srcV}></YoutubeViewer>
+
               <div className = "comment-in-note">
                 <NewComment
                 comment={this.state.newComment}
@@ -379,18 +366,6 @@ render() {
                 <CommentsList comments={this.state.comments}
                 onDelete={this.deleteComment} />
               </div>
-
-              <div className = "video">
-                <iframe
-                width ="560"
-                height = "315"
-                src = {this.embedingVideo()}
-                frameBorder = "0"
-                allowFullScreen>
-                </iframe>
-
-                {this.state.srcV}
-                </div> 
 
               <button className="btn-primary" onClick={()=> 
                 {
