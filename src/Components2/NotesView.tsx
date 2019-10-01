@@ -7,6 +7,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import {Comment} from "../model/Comment";	
 import {NewComment} from "./NewComment";	
 import {CommentsList} from "./CommentsList";
+import {SearchNote} from "./SearchNote";
 
 
 interface IState{
@@ -61,7 +62,7 @@ interface IProps{
 
 }
 
-var items = [
+export var items = [
   {
     title: "test note title 1",
     body: "test body 1",
@@ -110,7 +111,6 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     comments: [{}]
 }
 ];
-
 
 
 class NotesView extends React.Component <IProps, IState> {
