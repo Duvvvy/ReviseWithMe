@@ -7,7 +7,6 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import {Comment} from "../model/Comment";	
 import {NewComment} from "./NewComment";	
 import {CommentsList} from "./CommentsList";
-import {SearchNote} from "./SearchNote";
 
 
 interface IState{
