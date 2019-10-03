@@ -64,7 +64,7 @@ interface IProps{
 
 }
 
-var items = [
+export var items = [
   {
     title: "test note title 1",
     body: "test body 1",
@@ -117,7 +117,6 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     comments: []
 }
 ];
-
 
 
 class NotesView extends React.Component <IProps, IState> {
