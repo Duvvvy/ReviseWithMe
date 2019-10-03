@@ -10,7 +10,7 @@ function searchingFor(term) {
             || x.description.toLowerCase().includes(term.toLowerCase())
             || !term)
         }
-    }
+    }   
 }
 
 
@@ -33,10 +33,13 @@ export class SearchNote extends React.Component {
     }
 
     displayNote(term, person)   {
-        if (term !== null || term == " ")    {
+        if (term === "") {
+            this.setState({term:null})
+        }
+        if (term !== null)    {
             return(
                 <div key={person.noteID}>
-                    <p>Look at note "{person.title}":{term}</p>
+                    <p>Look at note "{person.title}"</p>
                 </div>
                 )
         }
