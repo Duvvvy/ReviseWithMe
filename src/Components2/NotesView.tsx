@@ -8,11 +8,11 @@ import {Comment} from "../model/Comment";
 import {NewComment} from "./NewComment";	
 import {CommentsList} from "./CommentsList";
 
-
 interface IState{
   isModalOpen: boolean,
   isCreationModalOpen: boolean,
   isHighlighted: boolean,
+  isFavourite: boolean,
   title: string,
   description: string,
   body: string,
@@ -27,6 +27,7 @@ interface IState{
 }
 
 interface Values {
+  isFavourite: boolean
   title: string;
   description: string;
   date: string;
@@ -39,6 +40,7 @@ const initialState = {
   isModalOpen: false,
   isCreationModalOpen: false,
   isHighlighted: false,
+  isFavourite: false,
   title: "Enter Title",
   description: "Enter Description",
   body: "depreciated",
@@ -58,9 +60,7 @@ const initialState = {
 
 interface IProps{
   notesArray: any
-
 }
-
 var items = [
   {
     title: "test note title 1",
@@ -116,13 +116,16 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
-
-
     this.state = {
-        ...initialState,
+        ...initialState, 
     }
     this.highlightClick = this.highlightClick.bind(this);
   }
+  changeColor(){
+    this.setState({isFavourite: !this.state.isFavourite})
+  }
+
+  
 
   private addComment = (event: React.FormEvent<HTMLFormElement>) => {	
     event.preventDefault();	
@@ -201,6 +204,12 @@ class NotesView extends React.Component <IProps, IState> {
   toggle = () => {
     this.setState((prevState) => ({
       isModalOpen: !prevState.isModalOpen
+    }));
+  }
+
+  toggleFave = () => {
+    this.setState((prevState) => ({
+      isFavourite: !prevState.isFavourite
     }));
   }
 
@@ -306,6 +315,8 @@ class NotesView extends React.Component <IProps, IState> {
   }
 
 render() {
+  let btn_class = this.state.isFavourite ? "faveButton" : "unfaveButton";
+
     return (
       
       <div>
@@ -369,10 +380,23 @@ render() {
                 }
               }
               >Edit Note</button>
+              <button className={btn_class} 
+                onClick={()=>
+                  {
+                    this.changeColor.bind(this);
+                    this.toggleFave();
+                   /* if(this.state.isFavourite){
+                      console.log('this is in favourites');
+                    }
+                    else
+                    { 
+                      console.log('this is normal');
+                    }*/
+                  }
+                }
+              >Favourite</button>
+              
           </ModalBody>
-
-
-
 
         </Modal>
 
@@ -381,7 +405,7 @@ render() {
           <ModalBody id='modal-body'>
 
             
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: '', comments: this.state.comments}} 
+          <Formik initialValues={{isFavourite: this.state.isFavourite, title: this.state.title, description: this.state.description, date: '', time: '', src: '', comments: this.state.comments}} 
             onSubmit={values => {
               this.saveNote(values)
             }}
