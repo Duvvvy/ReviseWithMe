@@ -11,7 +11,6 @@ export const CommentListItem: FunctionComponent<Props> = ({comment, onDelete}) =
     const onClick = () => {
         onDelete(comment);
     };
-
     return (
         <div id="comments">
             
@@ -22,7 +21,7 @@ export const CommentListItem: FunctionComponent<Props> = ({comment, onDelete}) =
             <div id="description">
                 {comment.description}
             </div>
-            <button onClick={onClick}>Delete Comment</button>
+            <button className= 'btn-primary' onClick={onClick}>Delete Comment</button>
         </div>
     );
 };

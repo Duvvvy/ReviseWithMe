@@ -13,25 +13,6 @@
   width: 350px; /* change this for the width of the text area*/
 }
 
-#comment_form button[type="submit"] {
-  outline: none !important;
-  background: #282c34 !important;
-  border: none !important;
-  display: inline-block !important;
-  padding: 6px 18px !important;
-  color: #fff !important;
-  margin-right: 10px !important;
-  border-radius: 5px !important;
-  font-size: 12px !important;
-  cursor: pointer !important;
-}
-
-#comment_form button[type="submit"]:hover button[type="submit"]:active{
-  background: #666 !important;
-  outline: none !important;
-  border: none !important;
-}
-
 #comment_form div {
   margin-bottom: 8px;
   margin: 10px;

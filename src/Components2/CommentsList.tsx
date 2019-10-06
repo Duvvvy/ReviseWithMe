@@ -8,11 +8,13 @@ interface Props {
     onDelete: (comment: Comment) => void;
 }
 
-export const CommentsList: FunctionComponent<Props> = ({comments, onDelete}) => (
-    <ul>
+export const CommentsList: FunctionComponent<Props> = ({comments, onDelete}) => {
+    return (
+        <ul>
         {
-            comments.map((comment, index) => (
+            comments.map((comment) => (
             <CommentListItem comment={comment} onDelete={onDelete} />
         ))}
     </ul>
-);
+    );
+};
