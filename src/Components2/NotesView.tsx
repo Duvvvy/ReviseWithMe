@@ -267,6 +267,7 @@ class NotesView extends React.Component <IProps, IState> {
   }
 
   saveNote(values: Values){
+    console.log(this.state.comments)
     items.push(
       {
         title: values.title,
