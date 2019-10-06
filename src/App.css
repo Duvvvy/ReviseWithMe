@@ -14,17 +14,22 @@
 }
 
 #comment_form button[type="submit"] {
-  cursor: pointer;
-  border-radius: 8px;
+  outline: none !important;
+  background: #282c34 !important;
+  border: none !important;
+  display: inline-block !important;
+  padding: 6px 18px !important;
+  color: #fff !important;
+  margin-right: 10px !important;
+  border-radius: 5px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
 }
 
-#comment_form button[type="submit"]:hover {
-  border: 1px solid #bbb;
-  background-color: #999;
-}
-
-#comment_form button[type="submit"]:active {
-	border: 1px solid #999;
+#comment_form button[type="submit"]:hover button[type="submit"]:active{
+  background: #666 !important;
+  outline: none !important;
+  border: none !important;
 }
 
 #comment_form div {
@@ -123,6 +128,19 @@ html, body {
   padding-left: 20px;
   width: 300px;
   border-left: 1px solid #e9ecef;
+}
+
+.video {
+  position:relative;
+  padding-top:56.25%;
+}
+
+.iframeVideo {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
 }
 
 .form-control:focus {
