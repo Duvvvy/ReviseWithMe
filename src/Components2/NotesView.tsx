@@ -342,7 +342,8 @@ render() {
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
               <p id='note-body'>
-                <img alt={this.state.src} id='ImageInModal' src={this.state.src}></img>
+                <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
+                
                 {this.state.description}
                 
               </p>
@@ -398,8 +399,8 @@ render() {
           </div>
           <div>
           <TextareaAutosize 
-              rows={4}
-              rowsMax={10}
+              rows={20}
+              rowsMax={20}
               //columns={3}
               placeholder="Add notes"
               name="description" 
@@ -417,9 +418,6 @@ render() {
               onBlur={handleBlur}
           />
           </div>
-          <pre>
-              {JSON.stringify(values, null, 2)}
-          </pre>
           
           <Button className="btn-primary" type="submit" onClick={()=>
           {
