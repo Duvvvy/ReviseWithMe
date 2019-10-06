@@ -124,7 +124,6 @@ class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
 
-
     this.state = {
         ...initialState,
     }
@@ -132,19 +131,25 @@ class NotesView extends React.Component <IProps, IState> {
   }
 
   addComment = (event: React.FormEvent<HTMLFormElement>) => {	
-    event.preventDefault();	
-  
-    this.setState(aState => ({	
-      newComment: {	
-        id: aState.newComment.id + 1,	
-        title: "",	
-        description: ""	
-      },	
-      comments: [...aState.comments, aState.newComment]
-    }));	
-    console.log("added")
-    items[this.state.currentCard].comments = this.state.comments
-    console.log(items[this.state.currentCard].comments)
+    event.preventDefault();
+    if(this.state.newComment.title === '' && this.state.newComment.description === '')
+    {
+      alert("Comment title and/or description is empty")
+    }
+    else
+    {
+      this.state.comments.push(this.state.newComment)
+      this.setState({	
+        newComment: {	
+          id: this.state.newComment.id + 1,	
+          title: "",
+          description: ""	
+        },	
+        comments: this.state.comments
+      });	
+      items[this.state.currentCard].comments = this.state.comments
+      console.log("ADDED",items[this.state.currentCard].comments)
+    }
   };	
   
   handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {	
@@ -153,7 +158,7 @@ class NotesView extends React.Component <IProps, IState> {
         ...this.state.newComment,	
         title: event.target.value	
       }	
-    });	
+    });
   };	
   
   handleCommentChange2 = (event: React.ChangeEvent<HTMLTextAreaElement>) => {	
@@ -162,16 +167,23 @@ class NotesView extends React.Component <IProps, IState> {
         ...this.state.newComment,	
         description: event.target.value	
       }	
-    });	
+    });
   };	
   
  deleteComment = (commentToDelete: Comment) => {	
-    this.setState(previousState => ({	
-      comments: [	
-      ...previousState.comments.filter(comment => comment.id !== commentToDelete.id)	
-      ]	
-    }));	
-    items[this.state.currentCard].comments =this.state.comments
+  let idToRemove = 0
+  for(let i = 0; i < this.state.comments.length; i++)
+  {
+    if(this.state.comments[i].id === commentToDelete.id)
+    {
+      idToRemove = i
+    }
+  }
+  this.state.comments.splice(idToRemove, 1)
+  this.setState({	
+    comments: this.state.comments	
+  });
+    items[this.state.currentCard].comments = this.state.comments
   };
 
   async openImage(index:number) {
@@ -383,10 +395,6 @@ render() {
               }
               >Edit Note</button>
           </ModalBody>
-
-
-
-
         </Modal>
 
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">

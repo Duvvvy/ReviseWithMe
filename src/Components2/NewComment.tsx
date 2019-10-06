@@ -23,7 +23,7 @@ export const NewComment: FunctionComponent<Props> = ({
             </div>
         
             <div>
-                <button type= "submit" id="add_comment_button">Add Comment</button>
+                <button type= "submit" className="btn-primary">Add Comment</button>
             </div>
         </div>
     </form>
