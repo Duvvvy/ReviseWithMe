@@ -256,7 +256,7 @@ class NotesView extends React.Component <IProps, IState> {
         date: `¯\\_(ツ)_/¯`,
         time: "0",
         noteID: "unassigned",
-        src: "./logo192.png",
+        src: values.src,
         comments: this.state.comments
       });
       this.refresh()
@@ -380,7 +380,7 @@ render() {
           <ModalBody id='modal-body'>
 
             
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: '', comments: this.state.comments}} 
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments}} 
             onSubmit={values => {
               this.saveNote(values)
             }}
@@ -408,6 +408,19 @@ render() {
               onBlur={handleBlur}
           />
           </div>
+          <div>
+              <TextField 
+              placeholder="Image Link"
+              name="src" 
+              //value={values.title} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <pre>
+              {JSON.stringify(values, null, 2)}
+          </pre>
+          
           <Button className="btn-primary" type="submit" onClick={()=>
           {
             delete items[this.state.currentCard]
