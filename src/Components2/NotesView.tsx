@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-import { TextField, Button} from '@material-ui/core';
+import { TextField, Button, TextareaAutosize} from '@material-ui/core';
 import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -373,10 +373,6 @@ render() {
               }
               >Edit Note</button>
           </ModalBody>
-
-
-
-
         </Modal>
 
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
@@ -393,25 +389,25 @@ render() {
           <Form>
           <div>
               <TextField 
-              placeholder="Note title"
+              placeholder="Title"
               name="title" 
-              value={values.title} 
+              //value={values.title} 
               onChange={handleChange}
               onBlur={handleBlur}
           />
           </div>
           <div>
-          <TextField 
-              placeholder="Add note"
+          <TextareaAutosize 
+              rows={4}
+              rowsMax={10}
+              //columns={3}
+              placeholder="Add notes"
               name="description" 
-              value={values.description} 
+              //value={values.description} 
               onChange={handleChange}
               onBlur={handleBlur}
           />
           </div>
-          <pre>
-              {JSON.stringify(values, null, 2)}
-          </pre>
           <Button className="btn-primary" type="submit" onClick={()=>
           {
             delete items[this.state.currentCard]
