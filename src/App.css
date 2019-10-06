@@ -38,6 +38,10 @@ html, body {
   color: #666;
 }
 
+#ImageInModal {
+  width: 80%
+}
+
 .btn-primary {
   outline: none !important;
   background: #282c34 !important;

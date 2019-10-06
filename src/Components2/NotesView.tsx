@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-import { TextField, Button} from '@material-ui/core';
+import { TextField, Button, TextareaAutosize} from '@material-ui/core';
 import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -24,7 +24,8 @@ interface IState{
   key: string,
   newComment: Comment,	
   comments: any[],
-  srcV: string,
+  src: string,
+  srcV: string
 }
 
 interface Values {
@@ -33,7 +34,7 @@ interface Values {
   date: string;
   time: string;
   src: string;
-  srcV: string;
+  //srcV: string;
   comments: any[]
 }
 
@@ -50,6 +51,7 @@ const initialState = {
   currentImageBase64: 0,
   ratio: 1,
   key: "textArea.time",
+  src: "",
   newComment: {	
     id: 0,	
     title: "",	
@@ -64,7 +66,7 @@ interface IProps{
 
 }
 
-var items = [
+export var items = [
   {
     title: "test note title 1",
     body: "test body 1",
@@ -119,11 +121,9 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
 ];
 
 
-
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
-
     this.state = {
         ...initialState,
     }
@@ -202,6 +202,7 @@ class NotesView extends React.Component <IProps, IState> {
         body: items[index].body,
         description: items[index].description,
         comments: items[index].comments,
+        src: items[index].src,
         srcV: items[index].srcV
       })
       console.log(this.state)
@@ -228,8 +229,9 @@ class NotesView extends React.Component <IProps, IState> {
 
   refresh = () => {
     this.setState({
-      ...initialState
+        ...initialState
     })
+    //this.saveToCookie(items);
   }
 
   confirmDelete = () => {
@@ -240,7 +242,8 @@ class NotesView extends React.Component <IProps, IState> {
         {
           label: 'Yes',
           onClick: () => {
-            delete items[this.state.currentCard]
+            //delete items[this.state.currentCard]
+            items.splice(this.state.currentCard, 1);
             this.refresh()
             alert('File deleted')
           }
@@ -276,7 +279,7 @@ class NotesView extends React.Component <IProps, IState> {
         date: `¯\\_(ツ)_/¯`,
         time: "0",
         noteID: "unassigned",
-        src: "./logo192.png",
+        src: values.src,
         comments: this.state.comments,
         srcV: ""
       });
@@ -287,15 +290,16 @@ class NotesView extends React.Component <IProps, IState> {
     var json_str = JSON.stringify(arr);
     //Cookies.name('mycookie');
     document.cookie = "myCookie = " + json_str;
+    console.log(json_str);
     console.log("saved")
   }
 
   readFromCookie(){
-
-    var value = document.cookie;
-    alert(value);
-    //var array = JSON.parse('"'+value+'"');
-    //alert(array);
+    console.log(items);
+    items = JSON.parse(document.cookie.slice(9));
+    console.log(items);
+    this.refresh();
+    
       
 
 
@@ -364,7 +368,10 @@ render() {
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
               <p id='note-body'>
+                <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
+                
                 {this.state.description}
+                
               </p>
               
               <YoutubeViewer srcV={this.state.srcV}></YoutubeViewer>
@@ -401,9 +408,7 @@ render() {
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
           <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
-
-            
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: '', comments: this.state.comments, srcV: ''}} 
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments}} 
             onSubmit={values => {
               this.saveNote(values)
             }}
@@ -412,7 +417,7 @@ render() {
           <Form>
           <div>
               <TextField 
-              placeholder="Note title"
+              placeholder="Title"
               name="title" 
               value={values.title} 
               onChange={handleChange}
@@ -420,19 +425,28 @@ render() {
           />
           </div>
           <div>
-          <TextField 
-              placeholder="Add note"
+          <TextareaAutosize 
+              rows={20}
+              rowsMax={20}
+              //columns={3}
+              placeholder="Add notes"
               name="description" 
               value={values.description} 
               onChange={handleChange}
               onBlur={handleBlur}
           />
           </div>
-          <pre>
-              {JSON.stringify(values, null, 2)}
-          </pre>
-          <Button className="btn-primary" type="submit" onClick={()=>
-          {
+          <div>
+              <TextField 
+              placeholder="Image Link"
+              name="src" 
+              value={values.src} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          
+          <Button className="btn-primary" type="submit" onClick={()=>{
             delete items[this.state.currentCard]
           }
         }
