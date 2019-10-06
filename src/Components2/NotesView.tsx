@@ -8,6 +8,7 @@ import {Comment} from "../model/Comment";
 import {NewComment} from "./NewComment";	
 import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
+import { SearchNote } from './SearchNote';
 
 interface IState{
   isModalOpen: boolean,
@@ -330,6 +331,9 @@ render() {
         }>+</button>
 
         <div className="main-content">
+        <div>
+        <SearchNote/>
+      </div>
           <div className="content">
             {items.map((textArea, index) => (
               <div className="image-holder" key={textArea.title}>
