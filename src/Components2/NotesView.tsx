@@ -24,7 +24,8 @@ interface IState{
   key: string,
   newComment: Comment,	
   comments: any[],
-  src: string
+  src: string,
+  srcV: string
 }
 
 interface Values {
@@ -33,7 +34,7 @@ interface Values {
   date: string;
   time: string;
   src: string;
-  srcV: string;
+  //srcV: string;
   comments: any[]
 }
 
@@ -188,7 +189,7 @@ class NotesView extends React.Component <IProps, IState> {
         body: items[index].body,
         description: items[index].description,
         comments: items[index].comments,
-        src: items[index].src
+        src: items[index].src,
         srcV: items[index].srcV
       })
       console.log(this.state)
