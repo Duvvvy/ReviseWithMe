@@ -216,8 +216,9 @@ class NotesView extends React.Component <IProps, IState> {
 
   refresh = () => {
     this.setState({
-      ...initialState
+        ...initialState
     })
+    //this.saveToCookie(items);
   }
 
   confirmDelete = () => {
@@ -228,7 +229,8 @@ class NotesView extends React.Component <IProps, IState> {
         {
           label: 'Yes',
           onClick: () => {
-            delete items[this.state.currentCard]
+            //delete items[this.state.currentCard]
+            items.splice(this.state.currentCard, 1);
             this.refresh()
             alert('File deleted')
           }
@@ -274,15 +276,16 @@ class NotesView extends React.Component <IProps, IState> {
     var json_str = JSON.stringify(arr);
     //Cookies.name('mycookie');
     document.cookie = "myCookie = " + json_str;
+    console.log(json_str);
     console.log("saved")
   }
 
   readFromCookie(){
-
-    var value = document.cookie;
-    alert(value);
-    //var array = JSON.parse('"'+value+'"');
-    //alert(array);
+    console.log(items);
+    items = JSON.parse(document.cookie.slice(9));
+    console.log(items);
+    this.refresh();
+    
       
 
 
