@@ -392,7 +392,7 @@ render() {
               <TextField 
               placeholder="Title"
               name="title" 
-              //value={values.title} 
+              value={values.title} 
               onChange={handleChange}
               onBlur={handleBlur}
           />
@@ -404,7 +404,7 @@ render() {
               //columns={3}
               placeholder="Add notes"
               name="description" 
-              //value={values.description} 
+              value={values.description} 
               onChange={handleChange}
               onBlur={handleBlur}
           />
@@ -413,14 +413,13 @@ render() {
               <TextField 
               placeholder="Image Link"
               name="src" 
-              //value={values.title} 
+              value={values.src} 
               onChange={handleChange}
               onBlur={handleBlur}
           />
           </div>
           
-          <Button className="btn-primary" type="submit" onClick={()=>
-          {
+          <Button className="btn-primary" type="submit" onClick={()=>{
             delete items[this.state.currentCard]
           }
         }
