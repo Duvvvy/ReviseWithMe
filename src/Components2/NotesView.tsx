@@ -34,7 +34,7 @@ interface Values {
   date: string;
   time: string;
   src: string;
-  //srcV: string;
+  srcV: string;
   comments: any[]
 }
 
@@ -270,7 +270,7 @@ class NotesView extends React.Component <IProps, IState> {
   }
 
   saveNote(values: Values){
-    console.log(this.state.comments)
+    console.log(this.state.srcV)
     items.push(
       {
         title: values.title,
@@ -281,7 +281,7 @@ class NotesView extends React.Component <IProps, IState> {
         noteID: "unassigned",
         src: values.src,
         comments: this.state.comments,
-        srcV: ""
+        srcV: values.srcV
       });
       this.refresh()
   }
@@ -408,7 +408,7 @@ render() {
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
           <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments}} 
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV}} 
             onSubmit={values => {
               this.saveNote(values)
             }}
@@ -444,6 +444,15 @@ render() {
               onChange={handleChange}
               onBlur={handleBlur}
           />
+          </div>
+          <div>
+            <TextField
+            placeholder="Youtube Link"
+            name="srcV"
+            value={values.srcV}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            />
           </div>
           
           <Button className="btn-primary" type="submit" onClick={()=>{
