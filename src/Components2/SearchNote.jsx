@@ -13,7 +13,6 @@ function searchingFor(term) {
     }   
 }
 
-
 export class SearchNote extends React.Component {
     constructor(props) {
         super(props);
@@ -32,24 +31,24 @@ export class SearchNote extends React.Component {
         })
     }
 
-
     displayNote(term, person)   {
+        var viewer = new NotesView();
         if (term === "") {
             this.setState({term:null})
         }
         if (term !== null)    {
-            const view = new NotesView();
             return(
-                // <div key={person.noteID}>
-                //     <p>Look at note "{person.title}"</p>
-                // </div>
+                <div>
+
                 <div className="content">
             {details.map((textArea, index) => (
               <div className="image-holder" key={textArea.noteID}>
                 <p >{person.date}</p>
                 <p>{person.description}</p>
                 <span className="bottom-caption"
-                  onClick={() => view.openImage(index)}
+                  onClick={() =>
+                        viewer.openImage(index)
+                    }
                 >
                   {person.title}
                 </span>
@@ -58,6 +57,8 @@ export class SearchNote extends React.Component {
               </div>
             ))}
           </div>
+          </div>
+          
                 )
         }
     }
