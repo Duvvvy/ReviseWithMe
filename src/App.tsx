@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 
 import NotesView from "./Components2/NotesView";
-import { SearchNote } from "./Components2/SearchNote";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 var testNotes = [
@@ -54,7 +53,6 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     return (
       <div>
         <div className='App-header'> Revise with me </div>
-        <SearchNote/>
         <NotesView notesArray={testNotes}></NotesView>
       </div>
     );

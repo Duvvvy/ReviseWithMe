@@ -1,5 +1,5 @@
 import React from 'react';
-import {items} from './NotesView';
+import NotesView, {items} from './NotesView';
 
 const details = [{}]
 
@@ -12,7 +12,6 @@ function searchingFor(term) {
         }
     }   
 }
-
 
 export class SearchNote extends React.Component {
     constructor(props) {
@@ -33,14 +32,33 @@ export class SearchNote extends React.Component {
     }
 
     displayNote(term, person)   {
+        var viewer = new NotesView();
         if (term === "") {
             this.setState({term:null})
         }
         if (term !== null)    {
             return(
-                <div key={person.noteID}>
-                    <p>Look at note "{person.title}"</p>
-                </div>
+                <div>
+
+                <div className="content">
+            {details.map((textArea, index) => (
+              <div className="image-holder" key={textArea.noteID}>
+                <p >{person.date}</p>
+                <p>{person.description}</p>
+                <span className="bottom-caption"
+                  onClick={() =>
+                        viewer.openImage(index)
+                    }
+                >
+                  {person.title}
+                </span>
+                <p id='note-title'>
+                </p>
+              </div>
+            ))}
+          </div>
+          </div>
+          
                 )
         }
     }
