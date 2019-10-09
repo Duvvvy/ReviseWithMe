@@ -9,6 +9,8 @@ import {NewComment} from "./NewComment";
 import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
 import { SearchNote } from './SearchNote';
+import SortView, {sortBy} from './SortView';
+import { any } from 'prop-types';
 
 interface IState{
   isModalOpen: boolean,
@@ -337,7 +339,7 @@ render() {
     return (
       
       <div>
-
+        <div className = "topbar"><SortView/></div>
         <Button onClick={()=>{this.readFromCookie()}}>Load from cookie</Button>
         <Button onClick={()=>{this.saveToCookie(items)}}>Save to cookie</Button>
         <button className='btn-primary'
