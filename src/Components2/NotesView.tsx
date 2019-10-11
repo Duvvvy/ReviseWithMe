@@ -120,7 +120,6 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
 }
 ];
 
-
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
@@ -130,6 +129,7 @@ class NotesView extends React.Component <IProps, IState> {
     this.highlightClick = this.highlightClick.bind(this);
   }
 
+  //Comment Start
   addComment = (event: React.FormEvent<HTMLFormElement>) => {	
     event.preventDefault();
     if(this.state.newComment.title === '' && this.state.newComment.description === '')
@@ -185,6 +185,7 @@ class NotesView extends React.Component <IProps, IState> {
   });
     items[this.state.currentCard].comments = this.state.comments
   };
+  //Comment end
 
   async openImage(index:number) {
     console.log(index);
@@ -299,11 +300,8 @@ class NotesView extends React.Component <IProps, IState> {
     items = JSON.parse(document.cookie.slice(9));
     console.log(items);
     this.refresh();
-    
-      
-
-
   }
+
   highlightClick(event:any)  {
     if (this.state.isHighlighted)  {
     this.setState({
@@ -391,7 +389,6 @@ render() {
                 {
                   this.confirmDelete()
                   this.toggle()
-                  
                 }
               }
               >Delete note</button>
