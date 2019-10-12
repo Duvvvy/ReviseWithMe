@@ -68,7 +68,7 @@ const initialState = {
   },	
   comments: [],
   srcV: "",
-  noteColour: "",
+  noteColour: '#F6F5F3',
   isPickerOpen: false
 }
 
@@ -87,7 +87,7 @@ export var items = [
     src: "https://i.imgur.com/o3j9qSk.jpg",
     srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
     comments: [],
-    noteColour: ""
+    noteColour: '#F6F5F3'
 },
 {
     title: "test note title 2",
@@ -118,7 +118,7 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/8SFJ8Xl.jpg",
     srcV: "", 
     comments: [],
-    noteColour: ""
+    noteColour: '#F6F5F3'
 },
 {
     title: "test note title 4",
@@ -130,7 +130,7 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/EhdZZ0R.jpg",
     srcV: "", 
     comments: [],
-    noteColour: ""
+    noteColour: '#F6F5F3'
 }
 ];
 
@@ -350,35 +350,17 @@ class NotesView extends React.Component <IProps, IState> {
   }
 
   backgroundColour() {
-    var color
-    console.log('color',this.state.noteColour)
-    if(this.state.noteColour === '') 
-    {
-      color = '#F6F5F3'
-    }
-    else
-    {
-      color = this.state.noteColour
-    }
-
     const backgroundColour = {
-      backgroundColor: color
+      backgroundColor: this.state.noteColour
     } as React.CSSProperties
 
     return backgroundColour
   }
 
   backgroundColourHome(color: string) {
-    console.log('color',this.state.noteColour)
-    if(this.state.noteColour === '') 
-    {
-      color = 'white'
-    }
-
     const backgroundColour = {
       backgroundColor: color
     } as React.CSSProperties
-
     return backgroundColour
   }
 
