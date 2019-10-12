@@ -8,6 +8,8 @@ import {Comment} from "../model/Comment";
 import {NewComment} from "./NewComment";	
 import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
+import { SearchNote } from './SearchNote';
+import PickerPopUp from './PickerPopUp';
 
 interface IState{
   isModalOpen: boolean,
@@ -25,7 +27,9 @@ interface IState{
   newComment: Comment,	
   comments: any[],
   src: string,
-  srcV: string
+  srcV: string,
+  noteColour: string,
+  isPickerOpen: boolean
 }
 
 interface Values {
@@ -36,6 +40,11 @@ interface Values {
   src: string;
   srcV: string;
   comments: any[]
+  noteColour: string;
+}
+
+interface ColourList {
+  noteColourList: any[]
 }
 
 const initialState = {
@@ -59,11 +68,12 @@ const initialState = {
   },	
   comments: [],
   srcV: "",
+  noteColour: "",
+  isPickerOpen: false
 }
 
 interface IProps{
   notesArray: any
-
 }
 
 export var items = [
@@ -76,7 +86,8 @@ export var items = [
     noteID: "n1",
     src: "https://i.imgur.com/o3j9qSk.jpg",
     srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
-    comments: []
+    comments: [],
+    noteColour: ""
 },
 {
     title: "test note title 2",
@@ -94,7 +105,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n2",
     src: "https://i.imgur.com/0kCZcQv.jpg",
     srcV: "",
-    comments: [{}]
+    comments: [{}],
+    noteColour: '#c4fffe'
 },
 {
     title: "test note title 3",
@@ -105,7 +117,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n3",
     src: "https://i.imgur.com/8SFJ8Xl.jpg",
     srcV: "", 
-    comments: []
+    comments: [],
+    noteColour: ""
 },
 {
     title: "test note title 4",
@@ -116,9 +129,11 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n4",
     src: "https://i.imgur.com/EhdZZ0R.jpg",
     srcV: "", 
-    comments: []
+    comments: [],
+    noteColour: ""
 }
 ];
+
 
 class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
@@ -129,7 +144,6 @@ class NotesView extends React.Component <IProps, IState> {
     this.highlightClick = this.highlightClick.bind(this);
   }
 
-  //Comment Start
   addComment = (event: React.FormEvent<HTMLFormElement>) => {	
     event.preventDefault();
     if(this.state.newComment.title === '' && this.state.newComment.description === '')
@@ -185,7 +199,6 @@ class NotesView extends React.Component <IProps, IState> {
   });
     items[this.state.currentCard].comments = this.state.comments
   };
-  //Comment end
 
   async openImage(index:number) {
     console.log(index);
@@ -204,7 +217,8 @@ class NotesView extends React.Component <IProps, IState> {
         description: items[index].description,
         comments: items[index].comments,
         src: items[index].src,
-        srcV: items[index].srcV
+        srcV: items[index].srcV,
+        noteColour: items[index].noteColour
       })
       console.log(this.state)
     }
@@ -221,13 +235,14 @@ class NotesView extends React.Component <IProps, IState> {
       return reader.result;
       }
 
-
+  //toggle to open model
   toggle = () => {
     this.setState((prevState) => ({
       isModalOpen: !prevState.isModalOpen
     }));
   }
 
+  //refresh state
   refresh = () => {
     this.setState({
         ...initialState
@@ -235,6 +250,7 @@ class NotesView extends React.Component <IProps, IState> {
     //this.saveToCookie(items);
   }
 
+  //pop up to display to confirm delete
   confirmDelete = () => {
     confirmAlert({
       title: 'Confirm to delete',
@@ -259,6 +275,7 @@ class NotesView extends React.Component <IProps, IState> {
     });
   };
 
+  //toggle note creation model top open
   toggleCreationModal = () =>{
     this.setState((prevState) => ({
       isCreationModalOpen: !prevState.isCreationModalOpen
@@ -270,6 +287,7 @@ class NotesView extends React.Component <IProps, IState> {
     this.toggleCreationModal()
   }
 
+  //save notes
   saveNote(values: Values){
     console.log(this.state.srcV)
     items.push(
@@ -282,7 +300,8 @@ class NotesView extends React.Component <IProps, IState> {
         noteID: "unassigned",
         src: values.src,
         comments: this.state.comments,
-        srcV: values.srcV
+        srcV: values.srcV,
+        noteColour: values.noteColour
       });
       this.refresh()
   }
@@ -300,8 +319,8 @@ class NotesView extends React.Component <IProps, IState> {
     items = JSON.parse(document.cookie.slice(9));
     console.log(items);
     this.refresh();
+    
   }
-
   highlightClick(event:any)  {
     if (this.state.isHighlighted)  {
     this.setState({
@@ -314,6 +333,7 @@ class NotesView extends React.Component <IProps, IState> {
     });
   }
   }
+  
   highlightText()  {
     
     if (this.state.isHighlighted)  {
@@ -328,6 +348,52 @@ class NotesView extends React.Component <IProps, IState> {
         )
    }
   }
+
+  backgroundColour() {
+    var color
+    console.log('color',this.state.noteColour)
+    if(this.state.noteColour === '') 
+    {
+      color = '#F6F5F3'
+    }
+    else
+    {
+      color = this.state.noteColour
+    }
+
+    const backgroundColour = {
+      backgroundColor: color
+    } as React.CSSProperties
+
+    return backgroundColour
+  }
+
+  backgroundColourHome(color: string) {
+    console.log('color',this.state.noteColour)
+    if(this.state.noteColour === '') 
+    {
+      color = 'white'
+    }
+
+    const backgroundColour = {
+      backgroundColor: color
+    } as React.CSSProperties
+
+    return backgroundColour
+  }
+
+  togglePicker() {
+    this.setState({
+      isPickerOpen: !this.state.isPickerOpen
+    })
+  }
+
+  handleChangeComplete = (color: any) => {
+    this.setState({
+      noteColour: color.hex 
+    });
+    items[this.state.currentCard].noteColour = this.state.noteColour
+  };
 
 render() {
 
@@ -346,9 +412,12 @@ render() {
         }>+</button>
 
         <div className="main-content">
+        <div>
+        <SearchNote/>
+      </div>
           <div className="content">
             {items.map((textArea, index) => (
-              <div className="image-holder" key={textArea.title}>
+              <div className="image-holder" key={textArea.title} style={this.backgroundColourHome(items[index].noteColour)}>
                 <p >{items[index].date}</p>
                 <p>{items[index].description}</p>
                 <span className="bottom-caption"
@@ -364,7 +433,7 @@ render() {
         </div>
         <Modal className="meme-modal" isOpen={this.state.isModalOpen} size="lg">
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
-          <ModalBody id='modal-body'>
+          <ModalBody id='modal-body' style={this.backgroundColour()}>
               <p id='note-body'>
                 <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
                 
@@ -389,6 +458,7 @@ render() {
                 {
                   this.confirmDelete()
                   this.toggle()
+                  
                 }
               }
               >Delete note</button>
@@ -399,13 +469,24 @@ render() {
                 }
               }
               >Edit Note</button>
-          </ModalBody>
+
+              <button className="btn-primary" onClick={this.togglePicker.bind(this)}>Picker</button>
+                <Modal className="colorPickerPopUp" isOpen={this.state.isPickerOpen} size="1g">
+                  <ModalBody id='modal-body'>
+                    <PickerPopUp
+                      closePopup={this.togglePicker.bind(this)}  
+                      handleChangeComplete={this.handleChangeComplete}
+                      noteColour={this.state.noteColour}
+                    />
+                  </ModalBody>
+                </Modal>
+            </ModalBody>
         </Modal>
 
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
           <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV}} 
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
             onSubmit={values => {
               this.saveNote(values)
             }}
@@ -463,6 +544,7 @@ render() {
           <div>
             {this.highlightText()}
           </div>
+
         </Form>
     
         }</Formik>
