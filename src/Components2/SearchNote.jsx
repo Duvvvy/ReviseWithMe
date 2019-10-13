@@ -1,5 +1,6 @@
 import React from 'react';
 import NotesView, {items} from './NotesView';
+import '../App.css';
 
 const details = [{}]
 
@@ -38,28 +39,26 @@ export class SearchNote extends React.Component {
         }
         if (term !== null)    {
             return(
-                <div>
-
-                <div className="content">
-            {details.map((textArea, index) => (
-              <div className="image-holder" key={textArea.noteID}>
-                <p >{person.date}</p>
-                <p>{person.description}</p>
-                <span className="bottom-caption"
-                  onClick={() =>
-                        viewer.openImage(index)
-                    }
-                >
-                  {person.title}
-                </span>
-                <p id='note-title'>
-                </p>
-              </div>
-            ))}
-          </div>
-          </div>
-          
-                )
+                <div className='searchbar'>
+                    <div className="content">
+                        {details.map((textArea, index) => (
+                        <div className="image-holder" key={textArea.noteID}>
+                            <p >{person.date}</p>
+                            <p>{person.description}</p>
+                            <span className="bottom-caption"
+                                onClick={() =>
+                                    // viewer.openImage(index),
+                                    viewer.setModalState(0 )
+                                }
+                            >
+                                {person.title}
+                            </span>
+                            <p id='note-title'></p>
+                        </div>
+                        ))}
+                    </div>
+                </div>
+            )
         }
     }
 

@@ -124,7 +124,7 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
 ];
 
 
-class NotesView extends React.Component <IProps, IState> {
+export class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
     this.state = {
@@ -196,20 +196,24 @@ class NotesView extends React.Component <IProps, IState> {
       base_image.src = image.src;
       const base64 = await this.getBase64Image(image.src);
       const ratio = await (base_image.width / base_image.height);
-      this.setState({
-        currentCard: index,
-        currentImageBase64: base64,
-        isModalOpen: true,
-        ratio: ratio,
-        title: items[index].title,
-        body: items[index].body,
-        description: items[index].description,
-        comments: items[index].comments,
-        src: items[index].src,
-        srcV: items[index].srcV
-      })
+      this.setModalState(index, base64, ratio);
       console.log(this.state)
     }
+
+  public setModalState(index: number, base64: string | ArrayBuffer | null, ratio: number) {
+    this.setState({
+      currentCard: index,
+      currentImageBase64: base64,
+      isModalOpen: true,
+      ratio: ratio,
+      title: items[index].title,
+      body: items[index].body,
+      description: items[index].description,
+      comments: items[index].comments,
+      src: items[index].src,
+      srcV: items[index].srcV
+    });
+  }
 
     async getBase64Image(url: any) {
       const response = await fetch(url);

@@ -17,14 +17,14 @@ export default class SortView extends React.Component    {
 
 
     handleChange(event)  {
-        if (event.target.value == "title")  {
+        if (event.target.value === "title")  {
             //sort notes by title
             this.setState({
                 sortState:"title",
                 previewState:"view by title..."
             })
         }
-        else if (event.target.value == "lastUpdate") {
+        else if (event.target.value === "lastUpdate") {
             //sort notes by date
             this.setState({
                 sortState:"date",
