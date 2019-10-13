@@ -43,10 +43,6 @@ interface Values {
   noteColour: string;
 }
 
-interface ColourList {
-  noteColourList: any[]
-}
-
 const initialState = {
   isModalOpen: false,
   isCreationModalOpen: false,
@@ -75,6 +71,8 @@ const initialState = {
 interface IProps{
   notesArray: any
 }
+
+let tempColour:string
 
 export var items = [
   {
@@ -370,12 +368,21 @@ class NotesView extends React.Component <IProps, IState> {
     })
   }
 
-  handleChangeComplete = (color: any) => {
+  handleChangeColour = () => {
+    console.log(tempColour)
     this.setState({
-      noteColour: color.hex 
-    });
-    items[this.state.currentCard].noteColour = this.state.noteColour
+      noteColour: tempColour
+    }, () => items[this.state.currentCard].noteColour = this.state.noteColour);
   };
+
+  callToggleAndChangeColour() {
+    this.handleChangeColour()
+    this.togglePicker()
+  }
+
+  changeTempColour = (color:any) => {
+    tempColour = color.hex
+  }
 
 render() {
 
@@ -443,7 +450,7 @@ render() {
                   
                 }
               }
-              >Delete note</button>
+              >Delete Note</button>
               <button className="btn-primary" onClick={()=>
                 {
                   this.toggle();
@@ -452,12 +459,13 @@ render() {
               }
               >Edit Note</button>
 
-              <button className="btn-primary" onClick={this.togglePicker.bind(this)}>Picker</button>
+              <button className="btn-primary" onClick={this.togglePicker.bind(this)}>Change colour</button>
                 <Modal className="colorPickerPopUp" isOpen={this.state.isPickerOpen} size="1g">
                   <ModalBody id='modal-body'>
                     <PickerPopUp
-                      closePopup={this.togglePicker.bind(this)}  
-                      handleChangeComplete={this.handleChangeComplete}
+                      saveColour={this.callToggleAndChangeColour.bind(this)}
+                      changeTempColour={this.changeTempColour}
+                      cancelColour={this.togglePicker.bind(this)}  
                       noteColour={this.state.noteColour}
                     />
                   </ModalBody>

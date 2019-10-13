@@ -7,9 +7,10 @@ class PickerPopUp extends React.Component {
         <div className='popup'>  
             <div className='popup-inner'>  
                 <h1>Pick a colour</h1> 
-                <SliderPicker onChange={this.props.handleChangeComplete} onChangeComplete={this.props.handleChangeComplete} color={this.props.noteColour}/>
+                <SliderPicker onChange={this.props.changeTempColour} onChangeComplete={this.props.changeTempColour} color={this.props.noteColour}/>
             </div>  
-            <button className="btn-primary" onClick={this.props.closePopup}>close me</button>  
+            <button className="btn-primary" onClick={this.props.saveColour}>Save</button>
+            <button className="btn-primary" onClick={this.props.cancelColour}>Cancel</button>  
         </div>  
         );      
     }     
