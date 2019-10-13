@@ -10,7 +10,7 @@
 	outline: 0;
 }
 #comment_form textarea {
-  width: 350px; /* change this for the width of the text area*/
+  width: 100%; /* change this for the width of the text area*/
 }
 
 #comment_form div {

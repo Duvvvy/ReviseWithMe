@@ -369,7 +369,6 @@ class NotesView extends React.Component <IProps, IState> {
   }
 
   handleChangeColour = () => {
-    console.log(tempColour)
     this.setState({
       noteColour: tempColour
     }, () => items[this.state.currentCard].noteColour = this.state.noteColour);
