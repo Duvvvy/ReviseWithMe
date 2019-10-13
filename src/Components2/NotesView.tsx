@@ -208,31 +208,43 @@ class NotesView extends React.Component <IProps, IState> {
     }
 
     async getBase64Image(url: any) {
+      //If browser detects any image file that has originated from another site, that does not feature the correct header
+      //It will crash the browser.
+
+      //We take the URL, and asyncronously fetch the URL
       const response = await fetch(url);
+      //Read the response as a blob file type
       const blob = await response.blob();
       const reader = new FileReader();
+
+      //Resolve the file
       await new Promise((resolve, reject) => {
         reader.onload = resolve;
         reader.onerror = reject;
         reader.readAsDataURL(blob);
       });
+      //And finally return it
       return reader.result;
       }
 
 
   toggle = () => {
     this.setState((prevState) => ({
+      //State of isModalOpen is inversed, this opens the modal.
       isModalOpen: !prevState.isModalOpen
     }));
   }
 
+
   refresh = () => {
     this.setState({
+      //State of 'NotesView' is refreshed, redrawing the page and re-indexing the card buttons.
       ...initialState
     })
   }
 
   confirmDelete = () => {
+    //Dialouge to confirm if the user actually wants to delete the selected note.
     confirmAlert({
       title: 'Confirm to delete',
       message: 'Are you sure to delete this file?',
@@ -257,13 +269,44 @@ class NotesView extends React.Component <IProps, IState> {
 
   toggleCreationModal = () =>{
     this.setState((prevState) => ({
+      //This sets the state for the creation modal to be open
+      //This needs to be different from toggle, as the HTML section is static, and cannot be dynamically changed.
       isCreationModalOpen: !prevState.isCreationModalOpen
     }));
   }
 
   openCreationModal(){
+    //Refreshes the page
     this.refresh()
+    //opens the modal
     this.toggleCreationModal()
+  }
+
+  highlightClick(event:any)  {
+    if (this.state.isHighlighted)  {
+    this.setState({
+      isHighlighted:false,
+    });
+  }
+  else  {
+    this.setState({
+      isHighlighted:true,
+    });
+  }
+  }
+  highlightText()  {
+    
+    if (this.state.isHighlighted)  {
+    return (
+
+      <b>{this.state.description}</b>      
+    )
+    }
+    else {
+      return(
+        <div>{this.state.description}</div>
+        )
+   }
   }
 
   saveNote(values: Values){
@@ -300,32 +343,7 @@ class NotesView extends React.Component <IProps, IState> {
 
 
   }
-  highlightClick(event:any)  {
-    if (this.state.isHighlighted)  {
-    this.setState({
-      isHighlighted:false,
-    });
-  }
-  else  {
-    this.setState({
-      isHighlighted:true,
-    });
-  }
-  }
-  highlightText()  {
-    
-    if (this.state.isHighlighted)  {
-    return (
 
-      <b>{this.state.description}</b>      
-    )
-    }
-    else {
-      return(
-        <div>{this.state.description}</div>
-        )
-   }
-  }
 
 render() {
 
