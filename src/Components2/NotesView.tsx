@@ -460,7 +460,7 @@ render() {
               >Edit Note</button>
 
               <button className="btn-primary" onClick={this.togglePicker.bind(this)}>Change colour</button>
-                <Modal className="colorPickerPopUp" isOpen={this.state.isPickerOpen} size="1g">
+                <Modal className="colourPickerPopUp" isOpen={this.state.isPickerOpen} size="1g">
                   <ModalBody id='modal-body'>
                     <PickerPopUp
                       saveColour={this.callToggleAndChangeColour.bind(this)}
