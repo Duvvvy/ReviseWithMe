@@ -10,6 +10,7 @@
     "@types/node": "12.7.2",
     "@types/react": "16.9.2",
     "@types/react-dom": "16.9.0",
+    "@types/react-highlight-words": "^0.16.0",
     "@types/reactstrap": "^8.0.4",
     "bootstrap": "^4.3.1",
     "enzyme": "^3.10.0",
@@ -20,7 +21,8 @@
     "react-cookie": "^4.0.1",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1",
-    "typescript": "3.5.3"
+    "typescript": "3.5.3",
+    "ya-bbcode": "^1.0.10"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -9,6 +9,9 @@ import {NewComment} from "./NewComment";
 import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
 import { SearchNote } from './SearchNote';
+import {HighlightParse} from './HighlightParse';
+
+
 
 interface IState{
   isModalOpen: boolean,
@@ -300,11 +303,8 @@ class NotesView extends React.Component <IProps, IState> {
     items = JSON.parse(document.cookie.slice(9));
     console.log(items);
     this.refresh();
-    
-      
-
-
   }
+
   highlightClick(event:any)  {
     if (this.state.isHighlighted)  {
     this.setState({
@@ -335,9 +335,7 @@ class NotesView extends React.Component <IProps, IState> {
 render() {
 
     return (
-      
       <div>
-
         <Button onClick={()=>{this.readFromCookie()}}>Load from cookie</Button>
         <Button onClick={()=>{this.saveToCookie(items)}}>Save to cookie</Button>
         <button className='btn-primary'
@@ -347,7 +345,6 @@ render() {
               console.log("working")
           }
         }>+</button>
-
         <div className="main-content">
         <div>
         <SearchNote/>
@@ -373,9 +370,8 @@ render() {
           <ModalBody id='modal-body'>
               <p id='note-body'>
                 <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
-                
-                {this.state.description}
-                
+
+              <HighlightParse text={this.state.description} hightlightText={["lorem"]}></HighlightParse>
               </p>
               
               <YoutubeViewer srcV={this.state.srcV}></YoutubeViewer>

@@ -9,6 +9,7 @@ function embedingVideo(srcV: string) {
     var videoID = getId(srcV)
     var link = "https://www.youtube.com/embed/"
     function getId(url: string) {
+        // eslint-disable-next-line
       var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
       var match = url.match(regExp);
   
