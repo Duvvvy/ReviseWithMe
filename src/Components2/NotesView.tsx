@@ -70,7 +70,8 @@ var items = [
     time: "11am",
     noteID: "n1",
     src: "https://i.imgur.com/o3j9qSk.jpg",
-    comments: [{}]
+    comments: [{}],
+    isFavourite: false
 },
 {
     title: "test note title 2",
@@ -87,7 +88,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     time: "12am",
     noteID: "n2",
     src: "https://i.imgur.com/0kCZcQv.jpg",
-    comments: [{}]
+    comments: [{}],
+    isFavourite: false
 },
 {
     title: "test note title 3",
@@ -97,7 +99,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     time: "3pm",
     noteID: "n3",
     src: "https://i.imgur.com/8SFJ8Xl.jpg",
-    comments: [{}]
+    comments: [{}],
+    isFavourite: false
 },
 {
     title: "test note title 4",
@@ -107,7 +110,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     time: "4pm",
     noteID: "n4",
     src: "https://i.imgur.com/EhdZZ0R.jpg",
-    comments: [{}]
+    comments: [{}],
+    isFavourite: false
 }
 ];
 
@@ -121,11 +125,6 @@ class NotesView extends React.Component <IProps, IState> {
     }
     this.highlightClick = this.highlightClick.bind(this);
   }
-  changeColor(){
-    this.setState({isFavourite: !this.state.isFavourite})
-  }
-
-  
 
   private addComment = (event: React.FormEvent<HTMLFormElement>) => {	
     event.preventDefault();	
@@ -183,7 +182,8 @@ class NotesView extends React.Component <IProps, IState> {
         title: items[index].title,
         body: items[index].body,
         description: items[index].description,
-        comments: items[index].comments
+        comments: items[index].comments,
+        isFavourite: items[index].isFavourite
       })
       console.log(this.state)
     }
@@ -211,6 +211,15 @@ class NotesView extends React.Component <IProps, IState> {
     this.setState((prevState) => ({
       isFavourite: !prevState.isFavourite
     }));
+    //console.log(this.state)
+    //items[this.state.currentCard].isFavourite=this.state.isFavourite
+    //console.log(items)
+  }
+  faveButton=() => {
+    items[this.state.currentCard].isFavourite=true
+  }
+  unfaveButton=() => {
+    items[this.state.currentCard].isFavourite=false
   }
 
   refresh = () => {
@@ -218,6 +227,7 @@ class NotesView extends React.Component <IProps, IState> {
       ...initialState
     })
   }
+  
 
   confirmDelete = () => {
     confirmAlert({
@@ -265,7 +275,8 @@ class NotesView extends React.Component <IProps, IState> {
         time: "0",
         noteID: "unassigned",
         src: "./logo192.png",
-        comments: this.state.comments
+        comments: this.state.comments,
+        isFavourite: false
       });
       this.refresh()
   }
@@ -369,7 +380,6 @@ render() {
                 {
                   this.confirmDelete()
                   this.toggle()
-                  
                 }
               }
               >Delete note</button>
@@ -383,21 +393,20 @@ render() {
               <button className={btn_class} 
                 onClick={()=>
                   {
-                    this.changeColor.bind(this);
-                    this.toggleFave();
-                   /* if(this.state.isFavourite){
-                      console.log('this is in favourites');
-                    }
+                    
+                    //this.toggleFave.bind(this);
+                    if(this.state.isFavourite===false)
+                      this.faveButton();
                     else
-                    { 
-                      console.log('this is normal');
-                    }*/
+                      this.unfaveButton();
+                    console.log(this.state)
+                    this.refreshFave();
+
+                    
                   }
                 }
               >Favourite</button>
-              
           </ModalBody>
-
         </Modal>
 
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
@@ -460,6 +469,12 @@ render() {
         </Modal>
       </div>
     )
+  }
+
+  private refreshFave() {
+    this.setState((prevState) => ({
+      isFavourite: !prevState.isFavourite
+    }));
   }
 }
 
