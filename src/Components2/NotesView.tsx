@@ -347,15 +347,7 @@ class NotesView extends React.Component <IProps, IState> {
    }
   }
 
-  backgroundColour() {
-    const backgroundColour = {
-      backgroundColor: this.state.noteColour
-    } as React.CSSProperties
-
-    return backgroundColour
-  }
-
-  backgroundColourHome(color: string) {
+  backgroundColour(color: string) {
     const backgroundColour = {
       backgroundColor: color
     } as React.CSSProperties
@@ -405,7 +397,7 @@ render() {
       </div>
           <div className="content">
             {items.map((textArea, index) => (
-              <div className="image-holder" key={textArea.title} style={this.backgroundColourHome(items[index].noteColour)}>
+              <div className="image-holder" key={textArea.title} style={this.backgroundColour(items[index].noteColour)}>
                 <p >{items[index].date}</p>
                 <p>{items[index].description}</p>
                 <span className="bottom-caption"
@@ -421,7 +413,7 @@ render() {
         </div>
         <Modal className="meme-modal" isOpen={this.state.isModalOpen} size="lg">
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
-          <ModalBody id='modal-body' style={this.backgroundColour()}>
+          <ModalBody id='modal-body' style={this.backgroundColour(this.state.noteColour)}>
               <p id='note-body'>
                 <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
                 
