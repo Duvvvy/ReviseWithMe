@@ -20,6 +20,7 @@
     "react-confirm-alert": "^2.4.1",
     "react-cookie": "^4.0.1",
     "react-dom": "^16.9.0",
+    "react-highlight-words": "^0.16.0",
     "react-scripts": "3.1.1",
     "typescript": "3.5.3",
     "ya-bbcode": "^1.0.10"

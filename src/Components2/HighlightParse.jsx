@@ -1,16 +1,7 @@
 import React from "react";
-import Highlighter from "react-highlight-words";
+import Highlighter from 'react-highlight-words';
 
-interface Props {
-    text: string;
-    hightlightText: string[];
-}
-
-
-export class HighlightParse extends React.Component <Props> {
-    constructor(Props: any) {
-      super(Props); 
-    }
+class HighlightParse extends React.Component {
 
     render(){
         return(
@@ -22,11 +13,9 @@ export class HighlightParse extends React.Component <Props> {
                 textToHighlight={this.props.text}
             />
             {this.props.text}
-
-
         </div>
         )
     }
 }
 
-//export default HighlightParse;
+export default HighlightParse;

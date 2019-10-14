@@ -9,7 +9,7 @@ import {NewComment} from "./NewComment";
 import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
 import { SearchNote } from './SearchNote';
-import {HighlightParse} from './HighlightParse';
+import HighlightParse from './HighlightParse';
 
 
 
@@ -371,7 +371,7 @@ render() {
               <p id='note-body'>
                 <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
 
-              <HighlightParse text={this.state.description} hightlightText={["lorem"]}></HighlightParse>
+              <HighlightParse text={this.state.description} hightlightText={["lorem"]}/>
               </p>
               
               <YoutubeViewer srcV={this.state.srcV}></YoutubeViewer>
