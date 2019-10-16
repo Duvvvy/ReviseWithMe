@@ -32,7 +32,7 @@ export class SearchNote extends React.Component {
         })
     }
 
-    displayNote(term, person)   {
+    displayNote(term, note)   {
         var viewer = new NotesView();
         if (term === "") {
             this.setState({term:null})
@@ -43,15 +43,15 @@ export class SearchNote extends React.Component {
                     <div className="content">
                         {details.map((textArea, index) => (
                         <div className="image-holder" key={textArea.noteID}>
-                            <p >{person.date}</p>
-                            <p>{person.description}</p>
+                            <p >{note.date}</p>
+                            <p>{note.description}</p>
                             <span className="bottom-caption"
                                 onClick={() =>
                                     // viewer.openImage(index),
                                     viewer.setModalState(0 )
                                 }
                             >
-                                {person.title}
+                                {note.title}
                             </span>
                             <p id='note-title'></p>
                         </div>
@@ -72,8 +72,8 @@ export class SearchNote extends React.Component {
                 />
                 <div>
                     {
-                        details.filter(searchingFor(term)).map(person =>
-                            this.displayNote(term, person)
+                        details.filter(searchingFor(term)).map(note =>
+                            this.displayNote(term, note)
                         )
                     }
                 </div>
