@@ -9,6 +9,7 @@ import {NewComment} from "./NewComment";
 import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
 import { SearchNote } from './SearchNote';
+import PickerPopUp from './PickerPopUp';
 
 interface IState{
   isModalOpen: boolean,
@@ -26,7 +27,9 @@ interface IState{
   newComment: Comment,	
   comments: any[],
   src: string,
-  srcV: string
+  srcV: string,
+  noteColour: string,
+  isPickerOpen: boolean
 }
 
 interface Values {
@@ -37,6 +40,7 @@ interface Values {
   src: string;
   srcV: string;
   comments: any[]
+  noteColour: string;
 }
 
 const initialState = {
@@ -60,12 +64,15 @@ const initialState = {
   },	
   comments: [],
   srcV: "",
+  noteColour: '#F6F5F3',
+  isPickerOpen: false
 }
 
 interface IProps{
   notesArray: any
-
 }
+
+let tempColour:string
 
 export var items = [
   {
@@ -77,7 +84,8 @@ export var items = [
     noteID: "n1",
     src: "https://i.imgur.com/o3j9qSk.jpg",
     srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
-    comments: []
+    comments: [],
+    noteColour: '#F6F5F3'
 },
 {
     title: "test note title 2",
@@ -95,7 +103,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n2",
     src: "https://i.imgur.com/0kCZcQv.jpg",
     srcV: "",
-    comments: [{}]
+    comments: [{}],
+    noteColour: '#c4fffe'
 },
 {
     title: "test note title 3",
@@ -106,7 +115,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n3",
     src: "https://i.imgur.com/8SFJ8Xl.jpg",
     srcV: "", 
-    comments: []
+    comments: [],
+    noteColour: '#F6F5F3'
 },
 {
     title: "test note title 4",
@@ -117,7 +127,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n4",
     src: "https://i.imgur.com/EhdZZ0R.jpg",
     srcV: "", 
-    comments: []
+    comments: [],
+    noteColour: '#F6F5F3'
 }
 ];
 
@@ -204,7 +215,8 @@ class NotesView extends React.Component <IProps, IState> {
         description: items[index].description,
         comments: items[index].comments,
         src: items[index].src,
-        srcV: items[index].srcV
+        srcV: items[index].srcV,
+        noteColour: items[index].noteColour
       })
       console.log(this.state)
     }
@@ -221,13 +233,14 @@ class NotesView extends React.Component <IProps, IState> {
       return reader.result;
       }
 
-
+  //toggle to open model
   toggle = () => {
     this.setState((prevState) => ({
       isModalOpen: !prevState.isModalOpen
     }));
   }
 
+  //refresh state
   refresh = () => {
     this.setState({
         ...initialState
@@ -235,6 +248,7 @@ class NotesView extends React.Component <IProps, IState> {
     //this.saveToCookie(items);
   }
 
+  //pop up to display to confirm delete
   confirmDelete = () => {
     confirmAlert({
       title: 'Confirm to delete',
@@ -259,6 +273,7 @@ class NotesView extends React.Component <IProps, IState> {
     });
   };
 
+  //toggle note creation model top open
   toggleCreationModal = () =>{
     this.setState((prevState) => ({
       isCreationModalOpen: !prevState.isCreationModalOpen
@@ -270,6 +285,7 @@ class NotesView extends React.Component <IProps, IState> {
     this.toggleCreationModal()
   }
 
+  //save notes
   saveNote(values: Values){
     console.log(this.state.srcV)
     items.push(
@@ -282,7 +298,8 @@ class NotesView extends React.Component <IProps, IState> {
         noteID: "unassigned",
         src: values.src,
         comments: this.state.comments,
-        srcV: values.srcV
+        srcV: values.srcV,
+        noteColour: values.noteColour
       });
       this.refresh()
   }
@@ -301,9 +318,6 @@ class NotesView extends React.Component <IProps, IState> {
     console.log(items);
     this.refresh();
     
-      
-
-
   }
   highlightClick(event:any)  {
     if (this.state.isHighlighted)  {
@@ -317,6 +331,7 @@ class NotesView extends React.Component <IProps, IState> {
     });
   }
   }
+  
   highlightText()  {
     
     if (this.state.isHighlighted)  {
@@ -330,6 +345,34 @@ class NotesView extends React.Component <IProps, IState> {
         <div>{this.state.description}</div>
         )
    }
+  }
+
+  backgroundColour(color: string) {
+    const backgroundColour = {
+      backgroundColor: color
+    } as React.CSSProperties
+    return backgroundColour
+  }
+
+  togglePicker() {
+    this.setState({
+      isPickerOpen: !this.state.isPickerOpen
+    })
+  }
+
+  handleChangeColour = () => {
+    this.setState({
+      noteColour: tempColour
+    }, () => items[this.state.currentCard].noteColour = this.state.noteColour);
+  };
+
+  callToggleAndChangeColour() {
+    this.handleChangeColour()
+    this.togglePicker()
+  }
+
+  changeTempColour = (color:any) => {
+    tempColour = color.hex
   }
 
 render() {
@@ -354,7 +397,7 @@ render() {
       </div>
           <div className="content">
             {items.map((textArea, index) => (
-              <div className="image-holder" key={textArea.title}>
+              <div className="image-holder" key={textArea.title} style={this.backgroundColour(items[index].noteColour)}>
                 <p >{items[index].date}</p>
                 <p>{items[index].description}</p>
                 <span className="bottom-caption"
@@ -370,7 +413,7 @@ render() {
         </div>
         <Modal className="meme-modal" isOpen={this.state.isModalOpen} size="lg">
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
-          <ModalBody id='modal-body'>
+          <ModalBody id='modal-body' style={this.backgroundColour(this.state.noteColour)}>
               <p id='note-body'>
                 <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
                 
@@ -398,7 +441,7 @@ render() {
                   
                 }
               }
-              >Delete note</button>
+              >Delete Note</button>
               <button className="btn-primary" onClick={()=>
                 {
                   this.toggle();
@@ -406,13 +449,25 @@ render() {
                 }
               }
               >Edit Note</button>
-          </ModalBody>
+
+              <button className="btn-primary" onClick={this.togglePicker.bind(this)}>Change colour</button>
+                <Modal className="colourPickerPopUp" isOpen={this.state.isPickerOpen} size="1g">
+                  <ModalBody id='modal-body'>
+                    <PickerPopUp
+                      saveColour={this.callToggleAndChangeColour.bind(this)}
+                      changeTempColour={this.changeTempColour}
+                      cancelColour={this.togglePicker.bind(this)}  
+                      noteColour={this.state.noteColour}
+                    />
+                  </ModalBody>
+                </Modal>
+            </ModalBody>
         </Modal>
 
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
           <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV}} 
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
             onSubmit={values => {
               this.saveNote(values)
             }}
@@ -470,6 +525,7 @@ render() {
           <div>
             {this.highlightText()}
           </div>
+
         </Form>
     
         }</Formik>

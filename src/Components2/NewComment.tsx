@@ -9,6 +9,7 @@ interface Props {
     comment: Comment;
 }
 
+//exports the comment input 
 export const NewComment: FunctionComponent<Props> = ({
     onChange, onAdd, comment, onChange2
 }) => (
