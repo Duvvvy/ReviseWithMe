@@ -9,6 +9,8 @@ import {NewComment} from "./NewComment";
 import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
 import { SearchNote } from './SearchNote';
+import SortView from './SortView';
+import { any } from 'prop-types';
 import PickerPopUp from './PickerPopUp';
 
 interface IState{
@@ -133,7 +135,7 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
 ];
 
 
-class NotesView extends React.Component <IProps, IState> {
+export class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
     this.state = {
@@ -380,7 +382,7 @@ render() {
     return (
       
       <div>
-
+        <div className = "topbar"><SortView/></div>
         <Button onClick={()=>{this.readFromCookie()}}>Load from cookie</Button>
         <Button onClick={()=>{this.saveToCookie(items)}}>Save to cookie</Button>
         <button className='btn-primary'
@@ -390,6 +392,10 @@ render() {
               console.log("working")
           }
         }>+</button>
+        <button className='btn-primary' onClick={() => {
+          console.log(items[0].title) 
+          this.refresh()}
+        }>Refresh</button>
 
         <div className="main-content">
         <div>

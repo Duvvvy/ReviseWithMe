@@ -156,13 +156,23 @@ html, body {
   display: flex;
 }
 
+.topbar {
+  background: #b7cbe2;  
+  padding: 5px;
+  float: right;
+}
 .sidebar {
   min-width: 300px;
-  background: #333333;
+  background: #475bb4;
   min-height: 100vh;
   margin-right: 7.5px;
   padding: 20px;
   max-width: 300px;
+}
+.searchbar {
+  background: #c5ccd6;
+  margin-right: 7.5px;
+  padding: 5px;
 }
 
 .sidebar p {
