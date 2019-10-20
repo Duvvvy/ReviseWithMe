@@ -46,9 +46,8 @@ export class SearchNote extends React.Component {
                             <p >{note.date}</p>
                             <p>{note.description}</p>
                             <span className="bottom-caption"
-                                onClick={() =>
-                                    // viewer.openImage(index),
-                                    viewer.setModalState(0 )
+                                onClick={() =>  
+                                    viewer.openImage(index)
                                 }
                             >
                                 {note.title}
