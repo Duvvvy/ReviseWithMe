@@ -319,7 +319,8 @@ class NotesView extends React.Component <IProps, IState> {
 
   readFromCookie(){
     console.log(items);
-    items = JSON.parse(document.cookie.slice(9));
+    var loadedItems = JSON.parse(document.cookie.slice(9));
+    items = loadedItems.filter(Boolean);
     console.log(items); 
     this.refresh();
   }
