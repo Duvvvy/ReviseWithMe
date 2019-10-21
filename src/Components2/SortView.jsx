@@ -31,6 +31,11 @@ export default class SortView extends React.Component    {
                 sortState:"date",
                 previewState:"viewing by date..."
             })
+            items.sort(function (a, b) {
+                if (a.date < b.date) { return -1; }
+                if (a.date > b.date) { return 1; }
+                return 0;
+            })
         }
         else    {
             //sort notes by favourite
@@ -38,7 +43,7 @@ export default class SortView extends React.Component    {
                 sortState:"favourite",
                 previewState:"viewing by favourite..."
             })
-            //this can be used after it gets merged later
+            // this can be used after it gets merged later
             // const favouriteNotes = items.fliter((item) => {
             //     return (item.isFavourite === true)
             // })
