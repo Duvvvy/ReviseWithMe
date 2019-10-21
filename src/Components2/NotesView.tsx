@@ -251,11 +251,18 @@ export class NotesView extends React.Component <IProps, IState> {
   }
   
   //toggle to make it favourite and to undo it
-  toggleFave = () => {
+  /*toggleFave = () => {
     this.setState((prevState) => ({
       isFavourite: !prevState.isFavourite
     }));
-  }  
+  }*/  
+
+
+  refreshFave() {
+    this.setState((prevState) => ({
+      isFavourite: !prevState.isFavourite
+    }));
+  }
 
   faveButton=() => {
     items[this.state.currentCard].isFavourite=true
@@ -587,11 +594,7 @@ render() {
     )
   }
 
-  private refreshFave() {
-    this.setState((prevState) => ({
-      isFavourite: !prevState.isFavourite
-    }));
-  }
+  
 
 }
 
