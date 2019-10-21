@@ -415,7 +415,6 @@ export class NotesView extends React.Component <IProps, IState> {
     return drawer
   }
 
-
 render() {
     return (
       <div className="main">
@@ -423,29 +422,27 @@ render() {
           <button className = "btn-primary" onClick={this.toggleDrawer} style={this.drawerStyleOpenClose()}>=</button>
           <div id="mySidenav" className="sidenav" style={this.drawerStyle()}>
             <li className = "drawer"><button className = 'btn-sidenav' onClick={this.toggleDrawer}>X</button></li>
-          <li className = "drawer"><button className='btn-sidenav' onClick={()=>{this.readFromCookie()}}>Load from cookie</button></li>
-          <li className = "drawer"><button className='btn-sidenav' onClick={()=>{this.saveToCookie(items)}}>Save to cookie</button></li>
-          <li className = "drawer"><button className='btn-sidenav'
+            <li className = "drawer"><button className='btn-sidenav' onClick={()=>{this.readFromCookie()}}>Load from cookie</button></li>
+            <li className = "drawer"><button className='btn-sidenav' onClick={()=>{this.saveToCookie(items)}}>Save to cookie</button></li>
+            <li className = "drawer"><button className='btn-sidenav'
               onClick={()=> {
               this.openCreationModal()
               console.log(this.state)
               console.log("working")
             }
-          }>+</button></li>
-          <li className = "drawer"><button className='btn-sidenav' onClick={() => {
-            console.log(items[0].title) 
-            this.refresh()}
-          }>Refresh</button></li>
-          <div>
+              }>+</button></li>
+              <li className = "drawer"><button className='btn-sidenav' onClick={() => {
+              console.log(items[0].title) 
+              this.refresh()}
+              }>Refresh</button></li>
+            <div>
             <SortView/>
-          </div>
-          <div className= "scroll">
-            <SearchNote/>
+            </div>
+            <div className= "scroll">
+              <SearchNote/>
+            </div>
           </div>
         </div>
-        </div>
-
-
 
         <div className="main-content">
           <div className="content">
@@ -468,10 +465,8 @@ render() {
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body' style={this.backgroundColour(this.state.noteColour)}>
               <p id='note-body'>
-                <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
-                
-                {this.state.description}
-                
+                <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div> 
+                {this.state.description} 
               </p>
               
               <YoutubeViewer srcV={this.state.srcV}></YoutubeViewer>
@@ -583,9 +578,7 @@ render() {
                     </div>
                   </Form>
                   }
-
                 </Formik>
-
           </ModalBody>
         </Modal>
       </div>
