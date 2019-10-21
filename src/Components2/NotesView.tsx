@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-import { TextField, Button, TextareaAutosize} from '@material-ui/core';
+import { TextField, TextareaAutosize} from '@material-ui/core';
 import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -10,8 +10,8 @@ import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
 import { SearchNote } from './SearchNote';
 import SortView from './SortView';
-import { any } from 'prop-types';
 import PickerPopUp from './PickerPopUp';
+import { getCurrentDate, getCurrentTime } from './GetDateTime';
 
 interface IState{
   isModalOpen: boolean,
@@ -21,7 +21,7 @@ interface IState{
   description: string,
   body: string,
   date: String,
-  time: number,
+  time: String,
   currentCard: number,
   currentImageBase64: any,
   ratio: number,
@@ -31,7 +31,8 @@ interface IState{
   src: string,
   srcV: string,
   noteColour: string,
-  isPickerOpen: boolean
+  isPickerOpen: boolean,
+  isDrawerOpen: boolean
 }
 
 interface Values {
@@ -49,11 +50,11 @@ const initialState = {
   isModalOpen: false,
   isCreationModalOpen: false,
   isHighlighted: false,
-  title: "Enter Title",
-  description: "Enter Description",
+  title: "",
+  description: "",
   body: "depreciated",
-  date: "¯\\_(ツ)_/¯",
-  time: 0,
+  date: getCurrentDate(),
+  time: getCurrentTime(),
   currentCard: -1,
   currentImageBase64: 0,
   ratio: 1,
@@ -67,7 +68,8 @@ const initialState = {
   comments: [],
   srcV: "",
   noteColour: '#F6F5F3',
-  isPickerOpen: false
+  isPickerOpen: false,
+  isDrawerOpen: false
 }
 
 interface IProps{
@@ -88,8 +90,8 @@ export var items = [
     srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
     comments: [],
     noteColour: '#F6F5F3'
-},
-{
+  },
+  {
     title: "test note title 2",
     body: "test body 2",
     description: `test note description 2, 
@@ -107,8 +109,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     srcV: "",
     comments: [{}],
     noteColour: '#c4fffe'
-},
-{
+  },
+  {
     title: "test note title 3",
     body: "test body 3",
     description: "test note description 3",
@@ -119,8 +121,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     srcV: "", 
     comments: [],
     noteColour: '#F6F5F3'
-},
-{
+  },
+  {
     title: "test note title 4",
     body: "test body 4",
     description: "test note description 4",
@@ -131,9 +133,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     srcV: "", 
     comments: [],
     noteColour: '#F6F5F3'
-}
+  }
 ];
-
 
 export class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
@@ -162,7 +163,6 @@ export class NotesView extends React.Component <IProps, IState> {
         comments: this.state.comments
       });	
       items[this.state.currentCard].comments = this.state.comments
-      console.log("ADDED",items[this.state.currentCard].comments)
     }
   };	
   
@@ -201,7 +201,6 @@ export class NotesView extends React.Component <IProps, IState> {
   };
 
   async openImage(index:number) {
-    console.log(index);
     const image = items[index];
       const base_image = new Image();
       base_image.src = image.src;
@@ -220,7 +219,6 @@ export class NotesView extends React.Component <IProps, IState> {
         srcV: items[index].srcV,
         noteColour: items[index].noteColour
       })
-      console.log(this.state)
     }
 
     async getBase64Image(url: any) {
@@ -295,8 +293,8 @@ export class NotesView extends React.Component <IProps, IState> {
         title: values.title,
         description: values.description,
         body: "depreciated",
-        date: `¯\\_(ツ)_/¯`,
-        time: "0",
+        date: getCurrentDate(),
+        time: getCurrentTime(),
         noteID: "unassigned",
         src: values.src,
         comments: this.state.comments,
@@ -376,35 +374,84 @@ export class NotesView extends React.Component <IProps, IState> {
   changeTempColour = (color:any) => {
     tempColour = color.hex
   }
+  
+  toggleDrawer = () => {
+    this.setState({
+      isDrawerOpen: !this.state.isDrawerOpen
+    })
+  }
+
+  drawerA() {
+    if(this.state.isDrawerOpen){
+      return "none"
+    }
+    else
+    {
+      return ""
+    }
+  }
+
+  drawerB() {
+    if(this.state.isDrawerOpen){
+      return ""
+    }
+    else
+    {
+      return "none"
+    }
+  }
+
+  drawerStyle() {
+    const drawer = {
+      display: this.drawerA()
+    } as React.CSSProperties
+    return drawer
+  }
+
+  drawerStyleOpenClose() {
+    const drawer = {
+      display: this.drawerB()
+    } as React.CSSProperties
+    return drawer
+  }
+
 
 render() {
-
     return (
-      
-      <div>
-        <div className = "topbar"><SortView/></div>
-        <Button onClick={()=>{this.readFromCookie()}}>Load from cookie</Button>
-        <Button onClick={()=>{this.saveToCookie(items)}}>Save to cookie</Button>
-        <button className='btn-primary'
-            onClick={()=> {
+      <div className="main">
+        <div className = "topbar">
+          <button className = "btn-primary" onClick={this.toggleDrawer} style={this.drawerStyleOpenClose()}>=</button>
+          <div id="mySidenav" className="sidenav" style={this.drawerStyle()}>
+            <li className = "drawer"><button className = 'btn-sidenav' onClick={this.toggleDrawer}>X</button></li>
+          <li className = "drawer"><button className='btn-sidenav' onClick={()=>{this.readFromCookie()}}>Load from cookie</button></li>
+          <li className = "drawer"><button className='btn-sidenav' onClick={()=>{this.saveToCookie(items)}}>Save to cookie</button></li>
+          <li className = "drawer"><button className='btn-sidenav'
+              onClick={()=> {
               this.openCreationModal()
               console.log(this.state)
               console.log("working")
-          }
-        }>+</button>
-        <button className='btn-primary' onClick={() => {
-          console.log(items[0].title) 
-          this.refresh()}
-        }>Refresh</button>
+            }
+          }>+</button></li>
+          <li className = "drawer"><button className='btn-sidenav' onClick={() => {
+            console.log(items[0].title) 
+            this.refresh()}
+          }>Refresh</button></li>
+          <div>
+            <SortView/>
+          </div>
+          <div className= "scroll">
+            <SearchNote/>
+          </div>
+        </div>
+        </div>
+
+
 
         <div className="main-content">
-        <div>
-        <SearchNote/>
-      </div>
           <div className="content">
             {items.map((textArea, index) => (
               <div className="image-holder" key={textArea.title} style={this.backgroundColour(items[index].noteColour)}>
-                <p >{items[index].date}</p>
+                <p >{items[index].date}, {items[index].time}</p>
                 <p>{items[index].description}</p>
                 <span className="bottom-caption"
                   onClick={() => this.openImage(index)}
@@ -444,7 +491,6 @@ render() {
                 {
                   this.confirmDelete()
                   this.toggle()
-                  
                 }
               }
               >Delete Note</button>
@@ -456,7 +502,7 @@ render() {
               }
               >Edit Note</button>
 
-              <button className="btn-primary" onClick={this.togglePicker.bind(this)}>Change colour</button>
+              <button className="btn-primary" onClick={this.togglePicker.bind(this)}>Change Colour</button>
                 <Modal className="colourPickerPopUp" isOpen={this.state.isPickerOpen} size="1g">
                   <ModalBody id='modal-body'>
                     <PickerPopUp
@@ -471,77 +517,74 @@ render() {
         </Modal>
 
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
-          <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
-          <ModalBody id='modal-body'>
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
-            onSubmit={values => {
-              this.saveNote(values)
-            }}
-          > 
-          {({values, handleChange, handleBlur}) => 
-          <Form>
-          <div>
-              <TextField 
-              placeholder="Title"
-              name="title" 
-              value={values.title} 
-              onChange={handleChange}
-              onBlur={handleBlur}
-          />
-          </div>
-          <div>
-          <TextareaAutosize 
-              rows={20}
-              rowsMax={20}
-              //columns={3}
-              placeholder="Add notes"
-              name="description" 
-              value={values.description} 
-              onChange={handleChange}
-              onBlur={handleBlur}
-          />
-          </div>
-          <div>
-              <TextField 
-              placeholder="Image Link"
-              name="src" 
-              value={values.src} 
-              onChange={handleChange}
-              onBlur={handleBlur}
-          />
-          </div>
-          <div>
-            <TextField
-            placeholder="Youtube Link"
-            name="srcV"
-            value={values.srcV}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            />
-          </div>
-          
-          <Button className="btn-primary" type="submit" onClick={()=>{
-            delete items[this.state.currentCard]
-          }
-        }
-          >Confirm</Button>
-          <Button className="btn-primary" 
-            onClick={ this.highlightClick }
-          >Highlight</Button>
-          <div>
-            {this.highlightText()}
-          </div>
+            <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
+              <ModalBody id='modal-body'>
+                <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
+                onSubmit={values => {
+                this.saveNote(values)
+                }}
+                > 
+                {({values, handleChange, handleBlur}) => 
+                  <Form>
+                    <div>
+                      <TextField 
+                      className = "text"
+                      placeholder="Title"
+                      name="title" 
+                      value={values.title} 
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      />
+                    </div>
+                    <div>
+                      <TextareaAutosize
+                          className = "text" 
+                          rows={20}
+                          rowsMax={20}
+                          placeholder="Add notes"
+                          name="description" 
+                          value={values.description} 
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                      />
+                    </div>
+                    <div>
+                      <TextField 
+                      className = "text"
+                      placeholder="Image Link"
+                      name="src" 
+                      value={values.src} 
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      />
+                    </div>
+                    <div>
+                      <TextField
+                      className = "text"
+                      placeholder="Youtube Link"
+                      name="srcV"
+                      value={values.srcV}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      />
+                    </div>
 
-        </Form>
-    
-        }</Formik>
-              <button className="btn-primary" onClick={()=> 
-                {
-                  this.confirmDelete()
-                  this.toggleCreationModal()
-                }
-              }
-              >Delete Note</button>
+                    <button className="btn-primary" type="submit" onClick={()=>{delete items[this.state.currentCard]}}>Confirm</button>
+                    <button className="btn-primary" onClick={ this.highlightClick }>Highlight</button>
+                    <button className="btn-primary" onClick={()=> 
+                    {
+                      this.confirmDelete()
+                     this.toggleCreationModal()
+                    }}
+                    > Delete Note</button>
+
+                    <div>
+                      {this.highlightText()}
+                    </div>
+                  </Form>
+                  }
+
+                </Formik>
 
           </ModalBody>
         </Modal>

@@ -53,7 +53,7 @@ export default class SortView extends React.Component    {
         return(
             <div>
                 <div>
-                    <select name="select" onChange={this.handleChange} >
+                    <select className="select" onChange={this.handleChange} >
                         <option value="lastUpdate">Date</option>
                         <option value="title">Title</option>
                         <option value="favourite">Favourite</option>
