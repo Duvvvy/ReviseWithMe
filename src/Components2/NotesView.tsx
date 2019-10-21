@@ -10,7 +10,7 @@ import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
 import { SearchNote } from './SearchNote';
 import SortView from './SortView';
-//import { any } from 'prop-types';
+import { any } from 'prop-types';
 import PickerPopUp from './PickerPopUp';
 
 interface IState{
@@ -90,8 +90,8 @@ export var items = [
     src: "https://i.imgur.com/o3j9qSk.jpg",
     srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
     comments: [],
-    isFavourite: false,
-    noteColour: '#F6F5F3'
+    noteColour: '#F6F5F3',
+    isFavourite: false
 },
 {
     title: "test note title 2",
@@ -110,8 +110,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/0kCZcQv.jpg",
     srcV: "",
     comments: [{}],
+    noteColour: '#c4fffe',
     isFavourite: false,
-    noteColour: '#c4fffe'
 },
 {
     title: "test note title 3",
@@ -123,8 +123,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/8SFJ8Xl.jpg",
     srcV: "", 
     comments: [],
+    noteColour: '#F6F5F3',
     isFavourite: false,
-    noteColour: '#F6F5F3'
 },
 {
     title: "test note title 4",
@@ -136,8 +136,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/EhdZZ0R.jpg",
     srcV: "", 
     comments: [],
+    noteColour: '#F6F5F3',
     isFavourite: false,
-    noteColour: '#F6F5F3'
 }
 ];
 
@@ -223,10 +223,10 @@ export class NotesView extends React.Component <IProps, IState> {
         body: items[index].body,
         description: items[index].description,
         comments: items[index].comments,
-        isFavourite: items[index].isFavourite,
         src: items[index].src,
         srcV: items[index].srcV,
-        noteColour: items[index].noteColour
+        noteColour: items[index].noteColour,
+        isFavourite: items[index].isFavourite
       })
       console.log(this.state)
     }
@@ -322,9 +322,9 @@ export class NotesView extends React.Component <IProps, IState> {
         noteID: "unassigned",
         src: values.src,
         comments: this.state.comments,
-        isFavourite: false,
         srcV: values.srcV,
-        noteColour: values.noteColour
+        noteColour: values.noteColour,
+        isFavourite: false
       });
       this.refresh()
   }
@@ -402,6 +402,7 @@ export class NotesView extends React.Component <IProps, IState> {
 
 render() {
   let btn_class = this.state.isFavourite ? "faveButton" : "unfaveButton";
+
     return (
       
       <div>
@@ -479,8 +480,6 @@ render() {
               }
               >Edit Note</button>
 
-
-
               <button className="btn-primary" onClick={this.togglePicker.bind(this)}>Change colour</button>
                 <Modal className="colourPickerPopUp" isOpen={this.state.isPickerOpen} size="1g">
                   <ModalBody id='modal-body'>
@@ -496,7 +495,6 @@ render() {
               <button className={btn_class} 
                 onClick={()=>
                   {
-                    
                     //this.toggleFave.bind(this);
                     if(this.state.isFavourite===false)
                       this.faveButton();
@@ -504,8 +502,6 @@ render() {
                       this.unfaveButton();
                     console.log(this.state)
                     this.refreshFave();
-
-                    
                   }
                 }
               >Favourite</button>
