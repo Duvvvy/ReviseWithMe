@@ -10,7 +10,7 @@ import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
 import { SearchNote } from './SearchNote';
 import SortView from './SortView';
-import { any } from 'prop-types';
+//import { any } from 'prop-types';
 import PickerPopUp from './PickerPopUp';
 
 interface IState{
