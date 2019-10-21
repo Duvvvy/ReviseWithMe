@@ -17,6 +17,7 @@ interface IState{
   isModalOpen: boolean,
   isCreationModalOpen: boolean,
   isHighlighted: boolean,
+  isFavourite: boolean,
   title: string,
   description: string,
   body: string,
@@ -35,6 +36,7 @@ interface IState{
 }
 
 interface Values {
+  isFavourite: boolean;
   title: string;
   description: string;
   date: string;
@@ -49,6 +51,7 @@ const initialState = {
   isModalOpen: false,
   isCreationModalOpen: false,
   isHighlighted: false,
+  isFavourite: false,
   title: "Enter Title",
   description: "Enter Description",
   body: "depreciated",
@@ -87,6 +90,7 @@ export var items = [
     src: "https://i.imgur.com/o3j9qSk.jpg",
     srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
     comments: [],
+    isFavourite: false,
     noteColour: '#F6F5F3'
 },
 {
@@ -106,6 +110,7 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/0kCZcQv.jpg",
     srcV: "",
     comments: [{}],
+    isFavourite: false,
     noteColour: '#c4fffe'
 },
 {
@@ -118,6 +123,7 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/8SFJ8Xl.jpg",
     srcV: "", 
     comments: [],
+    isFavourite: false,
     noteColour: '#F6F5F3'
 },
 {
@@ -130,6 +136,7 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/EhdZZ0R.jpg",
     srcV: "", 
     comments: [],
+    isFavourite: false,
     noteColour: '#F6F5F3'
 }
 ];
@@ -216,6 +223,7 @@ export class NotesView extends React.Component <IProps, IState> {
         body: items[index].body,
         description: items[index].description,
         comments: items[index].comments,
+        isFavourite: items[index].isFavourite,
         src: items[index].src,
         srcV: items[index].srcV,
         noteColour: items[index].noteColour
@@ -240,6 +248,20 @@ export class NotesView extends React.Component <IProps, IState> {
     this.setState((prevState) => ({
       isModalOpen: !prevState.isModalOpen
     }));
+  }
+  
+  //toggle to make it favourite and to undo it
+  toggleFave = () => {
+    this.setState((prevState) => ({
+      isFavourite: !prevState.isFavourite
+    }));
+  }  
+
+  faveButton=() => {
+    items[this.state.currentCard].isFavourite=true
+  }
+  unfaveButton=() => {
+    items[this.state.currentCard].isFavourite=false
   }
 
   //refresh state
@@ -300,6 +322,7 @@ export class NotesView extends React.Component <IProps, IState> {
         noteID: "unassigned",
         src: values.src,
         comments: this.state.comments,
+        isFavourite: false,
         srcV: values.srcV,
         noteColour: values.noteColour
       });
@@ -378,7 +401,7 @@ export class NotesView extends React.Component <IProps, IState> {
   }
 
 render() {
-
+  let btn_class = this.state.isFavourite ? "faveButton" : "unfaveButton";
     return (
       
       <div>
@@ -456,6 +479,8 @@ render() {
               }
               >Edit Note</button>
 
+
+
               <button className="btn-primary" onClick={this.togglePicker.bind(this)}>Change colour</button>
                 <Modal className="colourPickerPopUp" isOpen={this.state.isPickerOpen} size="1g">
                   <ModalBody id='modal-body'>
@@ -467,13 +492,30 @@ render() {
                     />
                   </ModalBody>
                 </Modal>
-            </ModalBody>
+                          
+              <button className={btn_class} 
+                onClick={()=>
+                  {
+                    
+                    //this.toggleFave.bind(this);
+                    if(this.state.isFavourite===false)
+                      this.faveButton();
+                    else
+                      this.unfaveButton();
+                    console.log(this.state)
+                    this.refreshFave();
+
+                    
+                  }
+                }
+              >Favourite</button>
+              </ModalBody>
         </Modal>
 
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
           <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
+          <Formik initialValues={{isFavourite: this.state.isFavourite, title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
             onSubmit={values => {
               this.saveNote(values)
             }}
@@ -548,6 +590,13 @@ render() {
       </div>
     )
   }
+
+  private refreshFave() {
+    this.setState((prevState) => ({
+      isFavourite: !prevState.isFavourite
+    }));
+  }
+
 }
 
 export default NotesView;
