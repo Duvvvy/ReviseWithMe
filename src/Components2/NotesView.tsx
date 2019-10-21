@@ -338,8 +338,9 @@ class NotesView extends React.Component <IProps, IState> {
     this.refresh();
   }
 
-
-
+  resetHighlights(){
+    items[this.state.currentCard].highlights = [];
+  }
 
 render() {
 
@@ -418,6 +419,7 @@ render() {
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
           <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
+            <Button onClick={()=> this.resetHighlights()}>Reset Highlights</Button>
           <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, highlights: this.state.highlights}} 
             onSubmit={values => {
               this.saveNote(values)
