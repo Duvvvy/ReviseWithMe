@@ -9,23 +9,18 @@ export function getCurrentDate(){
 
 export function getCurrentTime() {
     var hours = new Date().getHours(); //Current Hours
-    var min = new Date().getMinutes(); //Current Minutes
-    var sec = new Date().getSeconds(); //Current Seconds
+    var minutes = new Date().getMinutes(); //Current Minutes
 
-    var twentyfourhourtime = hours + ":" + min + ":" + sec
+    // Check whether AM or PM 
+    var newformat = hours >= 12 ? ' PM' : ' AM';  
+                
+    // Find current hour in AM-PM Format 
+    hours = hours % 12;  
+    
+    // To display "0" as "12" 
+    hours = hours ? hours : 12;  
+    minutes = minutes < 10 ? '0' + minutes : minutes; 
 
-    return twelvehourConvert(twentyfourhourtime)
+    var twelvehourConvert = hours + ":" + minutes + newformat
+    return twelvehourConvert
 }
-
-function twelvehourConvert (time) {
-    // Check correct time format and split into components
-  time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
-
-  if (time.length > 1) { // If time format correct
-    time = time.slice (1);  // Remove full string match value
-    time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
-    time[0] = +time[0] % 12 || 12; // Adjust hours
-  }
-  return time.join (''); // return adjusted time or original string
-}
-
