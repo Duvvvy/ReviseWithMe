@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-import { TextField, TextareaAutosize} from '@material-ui/core';
+import { TextField, Button, TextareaAutosize} from '@material-ui/core';
 import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -70,7 +70,7 @@ const initialState = {
   },	
   comments: [{}],
   srcV: "",
-  highlights: [{}]
+  highlights: [{}],
   noteColour: '#F6F5F3',
   isPickerOpen: false,
   isDrawerOpen: false
@@ -114,7 +114,6 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     srcV: "",
     comments: [],
     highlights: [],
-    comments: [{}],
     noteColour: '#c4fffe'
   },
   {
