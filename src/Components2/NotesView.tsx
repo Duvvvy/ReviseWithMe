@@ -12,7 +12,6 @@ import { SearchNote } from './SearchNote';
 import HighlightParse from './HighlightParse';
 
 
-
 interface IState{
   isModalOpen: boolean,
   isCreationModalOpen: boolean,
@@ -63,9 +62,9 @@ const initialState = {
     title: "",	
     description: ""	
   },	
-  comments: [],
+  comments: [{}],
   srcV: "",
-  highlights: []
+  highlights: [{}]
 }
 
 interface IProps{
@@ -102,8 +101,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n2",
     src: "https://i.imgur.com/0kCZcQv.jpg",
     srcV: "",
-    comments: [{}],
-    highlights: [{}]
+    comments: [],
+    highlights: []
 
 },
 {
@@ -131,8 +130,21 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     comments: [],
     highlights: []
 
+},{
+  title: "test note title 4",
+    body: "test body 4",
+    description: "test note description 4",
+    date: "4th of testuary",
+    time: "4pm",
+    noteID: "n4",
+    src: "https://i.imgur.com/EhdZZ0R.jpg",
+    srcV: "", 
+    comments: [{}],
+    highlights: [{}]
 }
+
 ];
+items.pop();
 
 
 class NotesView extends React.Component <IProps, IState> {
@@ -160,7 +172,7 @@ class NotesView extends React.Component <IProps, IState> {
         },	
         comments: this.state.comments
       });	
-      items[this.state.currentCard].comments = this.state.comments
+      items[this.state.currentCard].comments = this.state.comments;
       console.log("ADDED",items[this.state.currentCard].comments)
     }
   };	
@@ -216,7 +228,8 @@ class NotesView extends React.Component <IProps, IState> {
         description: items[index].description,
         comments: items[index].comments,
         src: items[index].src,
-        srcV: items[index].srcV
+        srcV: items[index].srcV,
+        highlights: items[index].highlights
       })
       console.log(this.state)
     }
