@@ -12,7 +12,6 @@ class HighlightParse extends React.Component {
                 autoEscape={true}
                 textToHighlight={this.props.text}
             />
-            {this.props.text}
         </div>
         )
     }

@@ -29,7 +29,8 @@ interface IState{
   newComment: Comment,	
   comments: any[],
   src: string,
-  srcV: string
+  srcV: string,
+  highlights: any[]
 }
 
 interface Values {
@@ -39,7 +40,8 @@ interface Values {
   time: string;
   src: string;
   srcV: string;
-  comments: any[]
+  comments: any[],
+  highlights: any[]
 }
 
 const initialState = {
@@ -63,6 +65,7 @@ const initialState = {
   },	
   comments: [],
   srcV: "",
+  highlights: []
 }
 
 interface IProps{
@@ -80,7 +83,8 @@ export var items = [
     noteID: "n1",
     src: "https://i.imgur.com/o3j9qSk.jpg",
     srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
-    comments: []
+    comments: [],
+    highlights: []
 },
 {
     title: "test note title 2",
@@ -98,7 +102,9 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n2",
     src: "https://i.imgur.com/0kCZcQv.jpg",
     srcV: "",
-    comments: [{}]
+    comments: [{}],
+    highlights: [{}]
+
 },
 {
     title: "test note title 3",
@@ -109,7 +115,9 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n3",
     src: "https://i.imgur.com/8SFJ8Xl.jpg",
     srcV: "", 
-    comments: []
+    comments: [],
+    highlights: []
+
 },
 {
     title: "test note title 4",
@@ -120,7 +128,9 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n4",
     src: "https://i.imgur.com/EhdZZ0R.jpg",
     srcV: "", 
-    comments: []
+    comments: [],
+    highlights: []
+
 }
 ];
 
@@ -130,8 +140,7 @@ class NotesView extends React.Component <IProps, IState> {
     super(IProps); 
     this.state = {
         ...initialState,
-    }
-    this.highlightClick = this.highlightClick.bind(this);
+    }  
   }
 
   addComment = (event: React.FormEvent<HTMLFormElement>) => {	
@@ -273,6 +282,15 @@ class NotesView extends React.Component <IProps, IState> {
     this.toggleCreationModal()
   }
 
+  highlightToggle(){
+    let currentCard = this.state;
+    //@ts-ignore
+    var index = window.getSelection().toString();
+    console.log(index)
+    //items[currentCard.currentCard].highlights.push([index])
+    currentCard.highlights.push(index)
+  }
+
   saveNote(values: Values){
     console.log(this.state.srcV)
     items.push(
@@ -285,7 +303,8 @@ class NotesView extends React.Component <IProps, IState> {
         noteID: "unassigned",
         src: values.src,
         comments: this.state.comments,
-        srcV: values.srcV
+        srcV: values.srcV,
+        highlights: values.highlights
       });
       this.refresh()
   }
@@ -301,36 +320,12 @@ class NotesView extends React.Component <IProps, IState> {
   readFromCookie(){
     console.log(items);
     items = JSON.parse(document.cookie.slice(9));
-    console.log(items);
+    console.log(items); 
     this.refresh();
   }
 
-  highlightClick(event:any)  {
-    if (this.state.isHighlighted)  {
-    this.setState({
-      isHighlighted:false,
-    });
-  }
-  else  {
-    this.setState({
-      isHighlighted:true,
-    });
-  }
-  }
-  highlightText()  {
-    
-    if (this.state.isHighlighted)  {
-    return (
 
-      <b>{this.state.description}</b>      
-    )
-    }
-    else {
-      return(
-        <div>{this.state.description}</div>
-        )
-   }
-  }
+
 
 render() {
 
@@ -345,6 +340,7 @@ render() {
               console.log("working")
           }
         }>+</button>
+        <Button onClick={() => {this.refresh()}}>refresh</Button>
         <div className="main-content">
         <div>
         <SearchNote/>
@@ -371,7 +367,7 @@ render() {
               <p id='note-body'>
                 <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
 
-              <HighlightParse text={this.state.description} hightlightText={["lorem"]}/>
+                <HighlightParse text={this.state.description} hightlightText={this.state.highlights}/>
               </p>
               
               <YoutubeViewer srcV={this.state.srcV}></YoutubeViewer>
@@ -408,7 +404,7 @@ render() {
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
           <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
-          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV}} 
+          <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, highlights: this.state.highlights}} 
             onSubmit={values => {
               this.saveNote(values)
             }}
@@ -461,10 +457,10 @@ render() {
         }
           >Confirm</Button>
           <Button className="btn-primary" 
-            onClick={ this.highlightClick }
+          onClick={() => {this.highlightToggle()}}
+
           >Highlight</Button>
           <div>
-            {this.highlightText()}
           </div>
         </Form>
     
