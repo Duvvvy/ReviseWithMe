@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-import { TextField, Button, TextareaAutosize} from '@material-ui/core';
+import { TextField, Button, Drawer, TextareaAutosize} from '@material-ui/core';
 import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -385,7 +385,7 @@ export class NotesView extends React.Component <IProps, IState> {
     tempColour = color.hex
   }
   
-  toggleDrawer = () => {
+  toggleDrawer() {
     this.setState({
       isDrawerOpen: !this.state.isDrawerOpen
     })
@@ -429,9 +429,14 @@ render() {
     return (
       <div className="main">
         <div className = "topbar">
-          <button className = "btn-primary" onClick={this.toggleDrawer} style={this.drawerStyleOpenClose()}>=</button>
+
+
+
+          <button className = "btn-primary" onClick={() =>this.toggleDrawer()} style={this.drawerStyleOpenClose()}>=</button>
+
+          {/*<Drawer anchor="left" onClose={() => this.toggleDrawer()} open={this.state.isDrawerOpen}></Drawer>*/}
           <div id="mySidenav" className="sidenav" style={this.drawerStyle()}>
-            <li className = "drawer"><button className = 'btn-sidenav' onClick={this.toggleDrawer}>X</button></li>
+            <li className = "drawer"><button className = 'btn-sidenav' onClick={() => this.toggleDrawer()}>X</button></li>
             <li className = "drawer"><button className='btn-sidenav' onClick={()=>{this.readFromCookie()}}>Load from cookie</button></li>
             <li className = "drawer"><button className='btn-sidenav' onClick={()=>{this.saveToCookie(items)}}>Save to cookie</button></li>
             <li className = "drawer"><button className='btn-sidenav'
@@ -455,6 +460,9 @@ render() {
               <SearchNote/>
             </div>
           </div>
+
+
+
         </div>
         <div className="main-content">
           <div className="content">
