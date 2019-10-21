@@ -1,5 +1,6 @@
 import React from 'react';
 import NotesView, {items} from './NotesView';
+import '../App.css';
 
 const details = [{}]
 
@@ -31,35 +32,32 @@ export class SearchNote extends React.Component {
         })
     }
 
-    displayNote(term, person)   {
+    displayNote(term, note)   {
         var viewer = new NotesView();
         if (term === "") {
             this.setState({term:null})
         }
         if (term !== null)    {
             return(
-                <div>
-
-                <div className="content">
-            {details.map((textArea, index) => (
-              <div className="image-holder" key={textArea.noteID}>
-                <p >{person.date}</p>
-                <p>{person.description}</p>
-                <span className="bottom-caption"
-                  onClick={() =>
-                        viewer.openImage(index)
-                    }
-                >
-                  {person.title}
-                </span>
-                <p id='note-title'>
-                </p>
-              </div>
-            ))}
-          </div>
-          </div>
-          
-                )
+                <div className='searchbar'>
+                    <div className="content">
+                        {details.map((textArea, index) => (
+                        <div className="image-holder" key={textArea.noteID} style={{backgroundColor: 'white'}}>
+                            <p >{note.date}</p>
+                            <p>{note.description}</p>
+                            <span className="bottom-caption"
+                                onClick={() =>  
+                                    viewer.openImage(index)
+                                }
+                            >
+                                {note.title}
+                            </span>
+                            <p id='note-title'></p>
+                        </div>
+                        ))}
+                    </div>
+                </div>
+            )
         }
     }
 
@@ -67,14 +65,14 @@ export class SearchNote extends React.Component {
         const { term, details } = this.state;
         return (
             <div>
-                <input id='Search-Notes'type="text" placeholder='Search Notes...'
+                <input id='search-notes'type="text" placeholder='Search Notes...'
                     onChange={this.searchHandler}
                     value={term}
                 />
                 <div>
                     {
-                        details.filter(searchingFor(term)).map(person =>
-                            this.displayNote(term, person)
+                        details.filter(searchingFor(term)).map(note =>
+                            this.displayNote(term, note)
                         )
                     }
                 </div>

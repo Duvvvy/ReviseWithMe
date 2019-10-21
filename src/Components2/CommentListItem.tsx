@@ -7,6 +7,7 @@ interface Props {
     onDelete: (comment: Comment) => void;
 }
 
+//exports Html elment of the comment in the list
 export const CommentListItem: FunctionComponent<Props> = ({comment, onDelete}) => {
     const onClick = () => {
         onDelete(comment);

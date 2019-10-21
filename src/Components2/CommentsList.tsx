@@ -8,6 +8,7 @@ interface Props {
     onDelete: (comment: Comment) => void;
 }
 
+//exporting to the comment list which shows the comment
 export const CommentsList: FunctionComponent<Props> = ({comments, onDelete}) => {
     return (
         <ul>
