@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-import { TextField, Button, Drawer, TextareaAutosize} from '@material-ui/core';
+import { TextField, Button, TextareaAutosize} from '@material-ui/core';
 import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -13,6 +13,8 @@ import HighlightParse from './HighlightParse';
 import SortView from './SortView';
 import PickerPopUp from './PickerPopUp';
 import { getCurrentDate, getCurrentTime } from './GetDateTime';
+import RevisionQuiz from './RevisionQuiz';
+import QuizForm from '../Quiz/QuizForm';
 
 interface IState{
   isModalOpen: boolean,
@@ -34,7 +36,10 @@ interface IState{
   highlights: any[],
   noteColour: string,
   isPickerOpen: boolean,
-  isDrawerOpen: boolean
+  isDrawerOpen: boolean,
+  isQuizOpen: boolean,
+  isQuizCreatorOpen: boolean
+
 }
 
 interface Values {
@@ -73,7 +78,9 @@ const initialState = {
   highlights: [{}],
   noteColour: '#F6F5F3',
   isPickerOpen: false,
-  isDrawerOpen: false
+  isDrawerOpen: false,
+  isQuizOpen: false,
+  isQuizCreatorOpen: false
 }
 
 interface IProps{
@@ -82,66 +89,9 @@ interface IProps{
 
 let tempColour:string
 
+export let quiz =[];
+
 export var items = [
-  {
-    title: "test note title 1",
-    body: "test body 1",
-    description: "test note description 1",
-    date: "1st of testuary",
-    time: "11am",
-    noteID: "n1",
-    src: "https://i.imgur.com/o3j9qSk.jpg",
-    srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
-    comments: [],
-    highlights: [],
-    noteColour: '#F6F5F3'
-  },
-  {
-    title: "test note title 2",
-    body: "test body 2",
-    description: `test note description 2, 
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum blandit rhoncus egestas. Donec sapien ante, aliquam cursus diam gravida, varius pharetra sapien. Donec non pharetra velit. Morbi nec suscipit orci. Nunc dui tortor, pulvinar sit amet mattis ac, aliquam ut dui. Donec aliquet ut turpis maximus mollis. Sed pellentesque ligula at neque rhoncus pretium. Donec tincidunt magna neque, imperdiet suscipit justo sodales ac.
-
-Aenean tempus, justo ac dictum mollis, urna nibh venenatis orci, non vulputate dolor massa a mauris. Morbi egestas interdum massa, ac vestibulum ante. Nullam id luctus mi. Nam cursus porttitor mauris. Cras a quam sit amet mi sagittis interdum eu nec odio. Integer ex odio, feugiat consectetur libero eu, auctor condimentum neque. In facilisis augue nec dui faucibus, a congue nulla iaculis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque aliquam vestibulum ipsum. Nullam tempus viverra commodo. Maecenas aliquet nisl a odio bibendum, et pulvinar lorem fringilla. Curabitur vitae libero leo. Fusce facilisis tortor sed ullamcorper suscipit.
-
-Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed lectus suscipit, nec aliquam dolor malesuada. Nam semper vitae felis a vestibulum. Quisque vitae facilisis felis, id tincidunt dolor. Vestibulum blandit, ipsum a egestas porta, lorem felis fermentum turpis, ultrices imperdiet eros mauris vitae mauris. Nunc vitae sem at leo elementum fermentum non nec ante. Morbi consequat quam urna, at eleifend arcu auctor quis.
-    
-    `,
-    date: "2nd of testuary",
-    time: "12am",
-    noteID: "n2",
-    src: "https://i.imgur.com/0kCZcQv.jpg",
-    srcV: "",
-    comments: [],
-    highlights: [],
-    noteColour: '#c4fffe'
-  },
-  {
-    title: "test note title 3",
-    body: "test body 3",
-    description: "test note description 3",
-    date: "3rd of testuary",
-    time: "3pm",
-    noteID: "n3",
-    src: "https://i.imgur.com/8SFJ8Xl.jpg",
-    srcV: "", 
-    comments: [],
-    highlights: [],
-    noteColour: '#F6F5F3'
-  },
-  {
-    title: "test note title 4",
-    body: "test body 4",
-    description: "test note description 4",
-    date: "4th of testuary",
-    time: "4pm",
-    noteID: "n4",
-    src: "https://i.imgur.com/EhdZZ0R.jpg",
-    srcV: "", 
-    comments: [],
-    highlights: [],
-    noteColour: '#F6F5F3'
-},
 {
   title: "test note title 4",
     body: "test body 4",
@@ -163,9 +113,9 @@ export class NotesView extends React.Component <IProps, IState> {
     super(IProps); 
     this.state = {
         ...initialState,
-    }  
+    }
   }
-
+  
   addComment = (event: React.FormEvent<HTMLFormElement>) => {	
     event.preventDefault();
     if(this.state.newComment.title === '' && this.state.newComment.description === '')
@@ -425,12 +375,24 @@ export class NotesView extends React.Component <IProps, IState> {
     return drawer
   }
 
+  toggleQuizModal(){
+    this.setState((prevState) => ({
+      isQuizOpen: !prevState.isQuizOpen
+    }));
+  }
+
+  quizCreator(){
+
+
+
+  }
+
 render() {
     return (
       <div className="main">
         <div className = "topbar">
 
-
+          <QuizForm></QuizForm>
 
           <button className = "btn-primary" onClick={() =>this.toggleDrawer()} style={this.drawerStyleOpenClose()}>=</button>
 
@@ -446,8 +408,9 @@ render() {
               console.log("working")
             }
               }>+</button></li>
-            //TODO Fix
+            
             <Button onClick={() => {this.refresh()}}>refresh</Button>
+            <Button onClick={() => {this.toggleQuizModal()}}>Quiz</Button>
 
               <li className = "drawer"><button className='btn-sidenav' onClick={() => {
               console.log(items[0].title) 
@@ -481,6 +444,14 @@ render() {
             ))}
           </div>
         </div>
+
+        <Modal className ="meme-modal" isOpen={this.state.isQuizOpen} size="lg">
+          <ModalHeader toggle={() => this.toggleQuizModal()}>Quiz</ModalHeader>
+          <ModalBody>
+            <RevisionQuiz quiz={[]}/>
+          </ModalBody>
+        </Modal>
+
         <Modal className="meme-modal" isOpen={this.state.isModalOpen} size="lg">
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body' style={this.backgroundColour(this.state.noteColour)}>
