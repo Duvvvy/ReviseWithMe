@@ -66,36 +66,6 @@ html, body {
   cursor: pointer !important;
 }
 
-/*button{
-  width: 80px;
-  height: 40px;
-  margin: 15px;
-}*/
-.unfaveButton{
-  outline: none !important;
-  background: rgb(167, 167, 167) !important;
-  border: none !important;
-  display: inline-block !important;
-  padding: 6px 18px !important;
-  color: rgb(0, 0, 0) !important;
-  margin-right: 10px !important;
-  border-radius: 5px !important;
-  font-size: 12px !important;
-  cursor: pointer !important;
-}
-.faveButton{
-  outline: none !important;
-  background: #ffe600 !important;
-  border: none !important;
-  display: inline-block !important;
-  padding: 6px 18px !important;
-  color: rgb(0, 0, 0) !important;
-  margin-right: 10px !important;
-  border-radius: 5px !important;
-  font-size: 12px !important;
-  cursor: pointer !important;
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 20vh;
@@ -269,7 +239,6 @@ html, body {
   background: linear-gradient(to left, rgb(51, 51, 51), rgba(51, 51, 51, 0.81));
 }
 
-
 .sidenav {
   float: left;
   background-color: rgb(80, 80, 80);
@@ -331,4 +300,3 @@ html, body {
 .select {
   width: 100%
 }
-
