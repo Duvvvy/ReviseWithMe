@@ -18,6 +18,7 @@ interface IState{
   isModalOpen: boolean,
   isCreationModalOpen: boolean,
   isHighlighted: boolean,
+  isFavourite: boolean,
   title: string,
   description: string,
   body: string,
@@ -38,6 +39,7 @@ interface IState{
 }
 
 interface Values {
+  isFavourite: boolean;
   title: string;
   description: string;
   date: string;
@@ -53,6 +55,9 @@ const initialState = {
   isModalOpen: false,
   isCreationModalOpen: false,
   isHighlighted: false,
+  isFavourite: false,
+  title: "Enter Title",
+  description: "Enter Description",
   title: "",
   description: "",
   body: "depreciated",
@@ -93,6 +98,10 @@ export var items = [
     src: "https://i.imgur.com/o3j9qSk.jpg",
     srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
     comments: [],
+    noteColour: '#F6F5F3',
+    isFavourite: false
+},
+{
     highlights: [],
     noteColour: '#F6F5F3'
   },
@@ -112,6 +121,11 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     noteID: "n2",
     src: "https://i.imgur.com/0kCZcQv.jpg",
     srcV: "",
+    comments: [{}],
+    noteColour: '#c4fffe',
+    isFavourite: false,
+},
+{
     comments: [],
     highlights: [],
     noteColour: '#c4fffe'
@@ -126,6 +140,10 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/8SFJ8Xl.jpg",
     srcV: "", 
     comments: [],
+    noteColour: '#F6F5F3',
+    isFavourite: false,
+},
+{
     highlights: [],
     noteColour: '#F6F5F3'
   },
@@ -139,6 +157,9 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/EhdZZ0R.jpg",
     srcV: "", 
     comments: [],
+    noteColour: '#F6F5F3',
+    isFavourite: false,
+}
     highlights: [],
     noteColour: '#F6F5F3'
 },
@@ -239,6 +260,8 @@ export class NotesView extends React.Component <IProps, IState> {
         comments: items[index].comments,
         src: items[index].src,
         srcV: items[index].srcV,
+        noteColour: items[index].noteColour,
+        isFavourite: items[index].isFavourite
         highlights: items[index].highlights,
         noteColour: items[index].noteColour
       })
@@ -261,6 +284,27 @@ export class NotesView extends React.Component <IProps, IState> {
     this.setState((prevState) => ({
       isModalOpen: !prevState.isModalOpen
     }));
+  }
+  
+  //toggle to make it favourite and to undo it
+  /*toggleFave = () => {
+    this.setState((prevState) => ({
+      isFavourite: !prevState.isFavourite
+    }));
+  }*/  
+
+
+  refreshFave() {
+    this.setState((prevState) => ({
+      isFavourite: !prevState.isFavourite
+    }));
+  }
+
+  faveButton=() => {
+    items[this.state.currentCard].isFavourite=true
+  }
+  unfaveButton=() => {
+    items[this.state.currentCard].isFavourite=false
   }
 
   //refresh state
@@ -331,6 +375,8 @@ export class NotesView extends React.Component <IProps, IState> {
         src: values.src,
         comments: this.state.comments,
         srcV: values.srcV,
+        noteColour: values.noteColour,
+        isFavourite: false
         highlights: values.highlights,
         noteColour: values.noteColour
       });
@@ -391,6 +437,8 @@ export class NotesView extends React.Component <IProps, IState> {
     })
   }
 
+render() {
+  let btn_class = this.state.isFavourite ? "faveButton" : "unfaveButton";
   drawerA() {
     if(this.state.isDrawerOpen){
       return "none"
@@ -529,10 +577,96 @@ render() {
                     />
                   </ModalBody>
                 </Modal>
-            </ModalBody>
+                          
+              <button className={btn_class} 
+                onClick={()=>
+                  {
+                    //this.toggleFave.bind(this);
+                    if(this.state.isFavourite===false)
+                      this.faveButton();
+                    else
+                      this.unfaveButton();
+                    console.log(this.state)
+                    this.refreshFave();
+                  }
+                }
+              >Favourite</button>
+              </ModalBody>
         </Modal>
 
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
+          <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
+          <ModalBody id='modal-body'>
+          <Formik initialValues={{isFavourite: this.state.isFavourite, title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
+            onSubmit={values => {
+              this.saveNote(values)
+            }}
+          > 
+          {({values, handleChange, handleBlur}) => 
+          <Form>
+          <div>
+              <TextField 
+              placeholder="Title"
+              name="title" 
+              value={values.title} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <div>
+          <TextareaAutosize 
+              rows={20}
+              rowsMax={20}
+              //columns={3}
+              placeholder="Add notes"
+              name="description" 
+              value={values.description} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <div>
+              <TextField 
+              placeholder="Image Link"
+              name="src" 
+              value={values.src} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <div>
+            <TextField
+            placeholder="Youtube Link"
+            name="srcV"
+            value={values.srcV}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            />
+          </div>
+          
+          <Button className="btn-primary" type="submit" onClick={()=>{
+            delete items[this.state.currentCard]
+          }
+        }
+          >Confirm</Button>
+          <Button className="btn-primary" 
+            onClick={ this.highlightClick }
+          >Highlight</Button>
+          <div>
+            {this.highlightText()}
+          </div>
+
+        </Form>
+    
+        }</Formik>
+              <button className="btn-primary" onClick={()=> 
+                {
+                  this.confirmDelete()
+                  this.toggleCreationModal()
+                }
+              }
+              >Delete Note</button>
+
             <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
               <ModalBody id='modal-body'>
                 <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour, highlights: this.state.highlights}} 
@@ -605,6 +739,9 @@ render() {
       </div>
     )
   }
+
+  
+
 }
 
 export default NotesView;
