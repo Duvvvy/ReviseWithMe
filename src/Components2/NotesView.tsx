@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-import { TextField, Button, Drawer, TextareaAutosize} from '@material-ui/core';
+import { TextField, Button, TextareaAutosize} from '@material-ui/core';
 import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -58,8 +58,6 @@ const initialState = {
   isFavourite: false,
   title: "Enter Title",
   description: "Enter Description",
-  title: "",
-  description: "",
   body: "depreciated",
   date: getCurrentDate(),
   time: getCurrentTime(),
@@ -75,7 +73,7 @@ const initialState = {
   },	
   comments: [{}],
   srcV: "",
-  highlights: [{}],
+  highlights: [""],
   noteColour: '#F6F5F3',
   isPickerOpen: false,
   isDrawerOpen: false
@@ -88,81 +86,6 @@ interface IProps{
 let tempColour:string
 
 export var items = [
-  {
-    title: "test note title 1",
-    body: "test body 1",
-    description: "test note description 1",
-    date: "1st of testuary",
-    time: "11am",
-    noteID: "n1",
-    src: "https://i.imgur.com/o3j9qSk.jpg",
-    srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
-    comments: [],
-    noteColour: '#F6F5F3',
-    isFavourite: false
-},
-{
-    highlights: [],
-    noteColour: '#F6F5F3'
-  },
-  {
-    title: "test note title 2",
-    body: "test body 2",
-    description: `test note description 2, 
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum blandit rhoncus egestas. Donec sapien ante, aliquam cursus diam gravida, varius pharetra sapien. Donec non pharetra velit. Morbi nec suscipit orci. Nunc dui tortor, pulvinar sit amet mattis ac, aliquam ut dui. Donec aliquet ut turpis maximus mollis. Sed pellentesque ligula at neque rhoncus pretium. Donec tincidunt magna neque, imperdiet suscipit justo sodales ac.
-
-Aenean tempus, justo ac dictum mollis, urna nibh venenatis orci, non vulputate dolor massa a mauris. Morbi egestas interdum massa, ac vestibulum ante. Nullam id luctus mi. Nam cursus porttitor mauris. Cras a quam sit amet mi sagittis interdum eu nec odio. Integer ex odio, feugiat consectetur libero eu, auctor condimentum neque. In facilisis augue nec dui faucibus, a congue nulla iaculis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque aliquam vestibulum ipsum. Nullam tempus viverra commodo. Maecenas aliquet nisl a odio bibendum, et pulvinar lorem fringilla. Curabitur vitae libero leo. Fusce facilisis tortor sed ullamcorper suscipit.
-
-Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed lectus suscipit, nec aliquam dolor malesuada. Nam semper vitae felis a vestibulum. Quisque vitae facilisis felis, id tincidunt dolor. Vestibulum blandit, ipsum a egestas porta, lorem felis fermentum turpis, ultrices imperdiet eros mauris vitae mauris. Nunc vitae sem at leo elementum fermentum non nec ante. Morbi consequat quam urna, at eleifend arcu auctor quis.
-    
-    `,
-    date: "2nd of testuary",
-    time: "12am",
-    noteID: "n2",
-    src: "https://i.imgur.com/0kCZcQv.jpg",
-    srcV: "",
-    comments: [{}],
-    noteColour: '#c4fffe',
-    isFavourite: false,
-},
-{
-    comments: [],
-    highlights: [],
-    noteColour: '#c4fffe'
-  },
-  {
-    title: "test note title 3",
-    body: "test body 3",
-    description: "test note description 3",
-    date: "3rd of testuary",
-    time: "3pm",
-    noteID: "n3",
-    src: "https://i.imgur.com/8SFJ8Xl.jpg",
-    srcV: "", 
-    comments: [],
-    noteColour: '#F6F5F3',
-    isFavourite: false,
-},
-{
-    highlights: [],
-    noteColour: '#F6F5F3'
-  },
-  {
-    title: "test note title 4",
-    body: "test body 4",
-    description: "test note description 4",
-    date: "4th of testuary",
-    time: "4pm",
-    noteID: "n4",
-    src: "https://i.imgur.com/EhdZZ0R.jpg",
-    srcV: "", 
-    comments: [],
-    noteColour: '#F6F5F3',
-    isFavourite: false,
-
-    highlights: []
-    // noteColour: '#F6F5F3'
-},
 {
   title: "test note title 4",
     body: "test body 4",
@@ -174,7 +97,8 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     srcV: "", 
     comments: [{}],
     highlights: [{}],
-    noteColour: '#F6F5F3'
+    noteColour: '#F6F5F3',
+    isFavourite: false
   }
 ];
 items.pop();
@@ -248,7 +172,7 @@ export class NotesView extends React.Component <IProps, IState> {
       const base_image = new Image();
       base_image.src = image.src;
       const base64 = await this.getBase64Image(image.src);
-      const ratio = await (base_image.width / base_image.height);
+      const ratio = (base_image.width / base_image.height);
       this.setState({
         currentCard: index,
         currentImageBase64: base64,
@@ -261,10 +185,9 @@ export class NotesView extends React.Component <IProps, IState> {
         src: items[index].src,
         srcV: items[index].srcV,
         noteColour: items[index].noteColour,
-        isFavourite: items[index].isFavourite
-        highlights: items[index].highlights,
-        noteColour: items[index].noteColour
-      })
+        isFavourite: items[index].isFavourite,
+        highlights: items[index].highlights     
+      });
     }
 
     async getBase64Image(url: any) {
@@ -376,9 +299,8 @@ export class NotesView extends React.Component <IProps, IState> {
         comments: this.state.comments,
         srcV: values.srcV,
         noteColour: values.noteColour,
-        isFavourite: false
-        highlights: values.highlights,
-        noteColour: values.noteColour
+        isFavourite: false,
+        highlights: values.highlights
       });
       this.refresh()
   }
@@ -437,8 +359,6 @@ export class NotesView extends React.Component <IProps, IState> {
     })
   }
 
-render() {
-  let btn_class = this.state.isFavourite ? "faveButton" : "unfaveButton";
   drawerA() {
     if(this.state.isDrawerOpen){
       return "none"
@@ -472,14 +392,11 @@ render() {
     } as React.CSSProperties
     return drawer
   }
-
 render() {
-    return (
+  let btn_class = this.state.isFavourite ? "faveButton" : "unfaveButton";
+  return (
       <div className="main">
         <div className = "topbar">
-
-
-
           <button className = "btn-primary" onClick={() =>this.toggleDrawer()} style={this.drawerStyleOpenClose()}>=</button>
 
           {/*<Drawer anchor="left" onClose={() => this.toggleDrawer()} open={this.state.isDrawerOpen}></Drawer>*/}
@@ -535,7 +452,7 @@ render() {
               <p id='note-body'>
                 <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
 
-                <HighlightParse text={this.state.description} hightlightText={this.state.highlights}/>
+            <HighlightParse text={this.state.description} hightlightText={this.state.highlights}/>
               </p>
               
               <YoutubeViewer srcV={this.state.srcV}></YoutubeViewer>
@@ -597,11 +514,11 @@ render() {
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
           <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body'>
-          <Formik initialValues={{isFavourite: this.state.isFavourite, title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
-            onSubmit={values => {
-              this.saveNote(values)
-            }}
-          > 
+            <Formik initialValues={{highlights: this.state.highlights, isFavourite: this.state.isFavourite, title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
+              onSubmit={values => {
+                this.saveNote(values)
+              }}
+            > 
           {({values, handleChange, handleBlur}) => 
           <Form>
           <div>
@@ -650,11 +567,8 @@ render() {
         }
           >Confirm</Button>
           <Button className="btn-primary" 
-            onClick={ this.highlightClick }
+            onClick={()=> this.highlightToggle() }
           >Highlight</Button>
-          <div>
-            {this.highlightText()}
-          </div>
 
         </Form>
     
@@ -666,75 +580,7 @@ render() {
                 }
               }
               >Delete Note</button>
-
-            <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
-              <ModalBody id='modal-body'>
-                <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour, highlights: this.state.highlights}} 
-                onSubmit={values => {
-                this.saveNote(values)
-                }}
-                > 
-                {({values, handleChange, handleBlur}) => 
-                  <Form>
-                    <div>
-                      <TextField 
-                      className = "text"
-                      placeholder="Title"
-                      name="title" 
-                      value={values.title} 
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      />
-                    </div>
-                    <div>
-                      <TextareaAutosize
-                          className = "text" 
-                          rows={20}
-                          rowsMax={20}
-                          placeholder="Add notes"
-                          name="description" 
-                          value={values.description} 
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                      />
-                    </div>
-                    <div>
-                      <TextField 
-                      className = "text"
-                      placeholder="Image Link"
-                      name="src" 
-                      value={values.src} 
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      />
-                    </div>
-                    <div>
-                      <TextField
-                      className = "text"
-                      placeholder="Youtube Link"
-                      name="srcV"
-                      value={values.srcV}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      />
-                    </div>
-
-                    <button className="btn-primary" type="submit" onClick={()=>{delete items[this.state.currentCard]}}>Confirm</button>
-                    <Button className="btn-primary" 
-                       onClick={() => {this.highlightToggle()}}>Highlight</Button>
-                    <button className="btn-primary" onClick={()=> 
-                    {
-                      this.confirmDelete()
-                     this.toggleCreationModal()
-                    }}
-                    > Delete Note</button>
-
-                    <Button onClick={()=> this.resetHighlights()}>Reset Highlights</Button>
-
-                  </Form>
-                  }
-                </Formik>
-          </ModalBody>
+        </ModalBody>
         </Modal>
       </div>
     )
