@@ -42,7 +42,7 @@ export class SearchNote extends React.Component {
                 <div className='searchbar'>
                     <div className="content">
                         {details.map((textArea, index) => (
-                        <div className="image-holder" key={textArea.noteID}>
+                        <div className="image-holder" key={textArea.noteID} style={{backgroundColor: 'white'}}>
                             <p >{note.date}</p>
                             <p>{note.description}</p>
                             <span className="bottom-caption"
@@ -65,7 +65,7 @@ export class SearchNote extends React.Component {
         const { term, details } = this.state;
         return (
             <div>
-                <input id='Search-Notes'type="text" placeholder='Search Notes...'
+                <input id='search-notes'type="text" placeholder='Search Notes...'
                     onChange={this.searchHandler}
                     value={term}
                 />
