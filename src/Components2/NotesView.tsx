@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
-import { TextField, TextareaAutosize} from '@material-ui/core';
+import { TextField, Button, Drawer, TextareaAutosize} from '@material-ui/core';
 import { Formik, Form} from 'formik';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -9,6 +9,7 @@ import {NewComment} from "./NewComment";
 import {CommentsList} from "./CommentsList";
 import { YoutubeViewer } from './YoutubeViewer';
 import { SearchNote } from './SearchNote';
+import HighlightParse from './HighlightParse';
 import SortView from './SortView';
 import PickerPopUp from './PickerPopUp';
 import { getCurrentDate, getCurrentTime } from './GetDateTime';
@@ -17,6 +18,7 @@ interface IState{
   isModalOpen: boolean,
   isCreationModalOpen: boolean,
   isHighlighted: boolean,
+  isFavourite: boolean,
   title: string,
   description: string,
   body: string,
@@ -30,19 +32,22 @@ interface IState{
   comments: any[],
   src: string,
   srcV: string,
+  highlights: any[],
   noteColour: string,
   isPickerOpen: boolean,
   isDrawerOpen: boolean
 }
 
 interface Values {
+  isFavourite: boolean;
   title: string;
   description: string;
   date: string;
   time: string;
   src: string;
   srcV: string;
-  comments: any[]
+  comments: any[],
+  highlights: any[],
   noteColour: string;
 }
 
@@ -50,6 +55,9 @@ const initialState = {
   isModalOpen: false,
   isCreationModalOpen: false,
   isHighlighted: false,
+  isFavourite: false,
+  title: "Enter Title",
+  description: "Enter Description",
   title: "",
   description: "",
   body: "depreciated",
@@ -65,8 +73,9 @@ const initialState = {
     title: "",	
     description: ""	
   },	
-  comments: [],
+  comments: [{}],
   srcV: "",
+  highlights: [{}],
   noteColour: '#F6F5F3',
   isPickerOpen: false,
   isDrawerOpen: false
@@ -89,6 +98,11 @@ export var items = [
     src: "https://i.imgur.com/o3j9qSk.jpg",
     srcV: "https://www.youtube.com/watch?v=Gs069dndIYk",
     comments: [],
+    noteColour: '#F6F5F3',
+    isFavourite: false
+},
+{
+    highlights: [],
     noteColour: '#F6F5F3'
   },
   {
@@ -108,6 +122,12 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/0kCZcQv.jpg",
     srcV: "",
     comments: [{}],
+    noteColour: '#c4fffe',
+    isFavourite: false,
+},
+{
+    comments: [],
+    highlights: [],
     noteColour: '#c4fffe'
   },
   {
@@ -120,6 +140,11 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/8SFJ8Xl.jpg",
     srcV: "", 
     comments: [],
+    noteColour: '#F6F5F3',
+    isFavourite: false,
+},
+{
+    highlights: [],
     noteColour: '#F6F5F3'
   },
   {
@@ -132,17 +157,34 @@ Aenean sed leo cursus, ultrices ante id, molestie sem. Donec venenatis arcu sed 
     src: "https://i.imgur.com/EhdZZ0R.jpg",
     srcV: "", 
     comments: [],
+    noteColour: '#F6F5F3',
+    isFavourite: false,
+
+    highlights: []
+    // noteColour: '#F6F5F3'
+},
+{
+  title: "test note title 4",
+    body: "test body 4",
+    description: "test note description 4",
+    date: "4th of testuary",
+    time: "4pm",
+    noteID: "n4",
+    src: "https://i.imgur.com/EhdZZ0R.jpg",
+    srcV: "", 
+    comments: [{}],
+    highlights: [{}],
     noteColour: '#F6F5F3'
   }
 ];
+items.pop();
 
 export class NotesView extends React.Component <IProps, IState> {
   constructor(IProps: any) {
     super(IProps); 
     this.state = {
         ...initialState,
-    }
-    this.highlightClick = this.highlightClick.bind(this);
+    }  
   }
 
   addComment = (event: React.FormEvent<HTMLFormElement>) => {	
@@ -162,7 +204,8 @@ export class NotesView extends React.Component <IProps, IState> {
         },	
         comments: this.state.comments
       });	
-      items[this.state.currentCard].comments = this.state.comments
+      items[this.state.currentCard].comments = this.state.comments;
+      console.log("ADDED",items[this.state.currentCard].comments)
     }
   };	
   
@@ -217,6 +260,9 @@ export class NotesView extends React.Component <IProps, IState> {
         comments: items[index].comments,
         src: items[index].src,
         srcV: items[index].srcV,
+        noteColour: items[index].noteColour,
+        isFavourite: items[index].isFavourite
+        highlights: items[index].highlights,
         noteColour: items[index].noteColour
       })
     }
@@ -238,6 +284,27 @@ export class NotesView extends React.Component <IProps, IState> {
     this.setState((prevState) => ({
       isModalOpen: !prevState.isModalOpen
     }));
+  }
+  
+  //toggle to make it favourite and to undo it
+  /*toggleFave = () => {
+    this.setState((prevState) => ({
+      isFavourite: !prevState.isFavourite
+    }));
+  }*/  
+
+
+  refreshFave() {
+    this.setState((prevState) => ({
+      isFavourite: !prevState.isFavourite
+    }));
+  }
+
+  faveButton=() => {
+    items[this.state.currentCard].isFavourite=true
+  }
+  unfaveButton=() => {
+    items[this.state.currentCard].isFavourite=false
   }
 
   //refresh state
@@ -285,7 +352,16 @@ export class NotesView extends React.Component <IProps, IState> {
     this.toggleCreationModal()
   }
 
-  //save notes
+
+  highlightToggle(){
+    let currentCard = this.state;
+    //@ts-ignore
+    var index = window.getSelection().toString();
+    console.log(index)
+    //items[currentCard.currentCard].highlights.push([index])
+    currentCard.highlights.push(index)
+  }
+
   saveNote(values: Values){
     console.log(this.state.srcV)
     items.push(
@@ -299,6 +375,9 @@ export class NotesView extends React.Component <IProps, IState> {
         src: values.src,
         comments: this.state.comments,
         srcV: values.srcV,
+        noteColour: values.noteColour,
+        isFavourite: false
+        highlights: values.highlights,
         noteColour: values.noteColour
       });
       this.refresh()
@@ -314,37 +393,14 @@ export class NotesView extends React.Component <IProps, IState> {
 
   readFromCookie(){
     console.log(items);
-    items = JSON.parse(document.cookie.slice(9));
-    console.log(items);
+    var loadedItems = JSON.parse(document.cookie.slice(9));
+    items = loadedItems.filter(Boolean);
+    console.log(items); 
     this.refresh();
-    
   }
-  highlightClick(event:any)  {
-    if (this.state.isHighlighted)  {
-    this.setState({
-      isHighlighted:false,
-    });
-  }
-  else  {
-    this.setState({
-      isHighlighted:true,
-    });
-  }
-  }
-  
-  highlightText()  {
-    
-    if (this.state.isHighlighted)  {
-    return (
 
-      <b>{this.state.description}</b>      
-    )
-    }
-    else {
-      return(
-        <div>{this.state.description}</div>
-        )
-   }
+  resetHighlights(){
+    items[this.state.currentCard].highlights = [];
   }
 
   backgroundColour(color: string) {
@@ -375,12 +431,14 @@ export class NotesView extends React.Component <IProps, IState> {
     tempColour = color.hex
   }
   
-  toggleDrawer = () => {
+  toggleDrawer() {
     this.setState({
       isDrawerOpen: !this.state.isDrawerOpen
     })
   }
 
+render() {
+  let btn_class = this.state.isFavourite ? "faveButton" : "unfaveButton";
   drawerA() {
     if(this.state.isDrawerOpen){
       return "none"
@@ -419,9 +477,14 @@ render() {
     return (
       <div className="main">
         <div className = "topbar">
-          <button className = "btn-primary" onClick={this.toggleDrawer} style={this.drawerStyleOpenClose()}>=</button>
+
+
+
+          <button className = "btn-primary" onClick={() =>this.toggleDrawer()} style={this.drawerStyleOpenClose()}>=</button>
+
+          {/*<Drawer anchor="left" onClose={() => this.toggleDrawer()} open={this.state.isDrawerOpen}></Drawer>*/}
           <div id="mySidenav" className="sidenav" style={this.drawerStyle()}>
-            <li className = "drawer"><button className = 'btn-sidenav' onClick={this.toggleDrawer}>X</button></li>
+            <li className = "drawer"><button className = 'btn-sidenav' onClick={() => this.toggleDrawer()}>X</button></li>
             <li className = "drawer"><button className='btn-sidenav' onClick={()=>{this.readFromCookie()}}>Load from cookie</button></li>
             <li className = "drawer"><button className='btn-sidenav' onClick={()=>{this.saveToCookie(items)}}>Save to cookie</button></li>
             <li className = "drawer"><button className='btn-sidenav'
@@ -431,6 +494,9 @@ render() {
               console.log("working")
             }
               }>+</button></li>
+            //TODO Fix
+            <Button onClick={() => {this.refresh()}}>refresh</Button>
+
               <li className = "drawer"><button className='btn-sidenav' onClick={() => {
               console.log(items[0].title) 
               this.refresh()}
@@ -442,8 +508,10 @@ render() {
               <SearchNote/>
             </div>
           </div>
-        </div>
 
+
+
+        </div>
         <div className="main-content">
           <div className="content">
             {items.map((textArea, index) => (
@@ -465,8 +533,9 @@ render() {
           <ModalHeader toggle={this.toggle}>{this.state.title}</ModalHeader>
           <ModalBody id='modal-body' style={this.backgroundColour(this.state.noteColour)}>
               <p id='note-body'>
-                <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div> 
-                {this.state.description} 
+                <div><img alt={this.state.src} id='ImageInModal' src={this.state.src}></img></div>
+
+                <HighlightParse text={this.state.description} hightlightText={this.state.highlights}/>
               </p>
               
               <YoutubeViewer srcV={this.state.srcV}></YoutubeViewer>
@@ -508,13 +577,99 @@ render() {
                     />
                   </ModalBody>
                 </Modal>
-            </ModalBody>
+                          
+              <button className={btn_class} 
+                onClick={()=>
+                  {
+                    //this.toggleFave.bind(this);
+                    if(this.state.isFavourite===false)
+                      this.faveButton();
+                    else
+                      this.unfaveButton();
+                    console.log(this.state)
+                    this.refreshFave();
+                  }
+                }
+              >Favourite</button>
+              </ModalBody>
         </Modal>
 
         <Modal className="meme-modal" isOpen={this.state.isCreationModalOpen} size="lg">
+          <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
+          <ModalBody id='modal-body'>
+          <Formik initialValues={{isFavourite: this.state.isFavourite, title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
+            onSubmit={values => {
+              this.saveNote(values)
+            }}
+          > 
+          {({values, handleChange, handleBlur}) => 
+          <Form>
+          <div>
+              <TextField 
+              placeholder="Title"
+              name="title" 
+              value={values.title} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <div>
+          <TextareaAutosize 
+              rows={20}
+              rowsMax={20}
+              //columns={3}
+              placeholder="Add notes"
+              name="description" 
+              value={values.description} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <div>
+              <TextField 
+              placeholder="Image Link"
+              name="src" 
+              value={values.src} 
+              onChange={handleChange}
+              onBlur={handleBlur}
+          />
+          </div>
+          <div>
+            <TextField
+            placeholder="Youtube Link"
+            name="srcV"
+            value={values.srcV}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            />
+          </div>
+          
+          <Button className="btn-primary" type="submit" onClick={()=>{
+            delete items[this.state.currentCard]
+          }
+        }
+          >Confirm</Button>
+          <Button className="btn-primary" 
+            onClick={ this.highlightClick }
+          >Highlight</Button>
+          <div>
+            {this.highlightText()}
+          </div>
+
+        </Form>
+    
+        }</Formik>
+              <button className="btn-primary" onClick={()=> 
+                {
+                  this.confirmDelete()
+                  this.toggleCreationModal()
+                }
+              }
+              >Delete Note</button>
+
             <ModalHeader toggle={this.toggleCreationModal}>{this.state.title}</ModalHeader>
               <ModalBody id='modal-body'>
-                <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour}} 
+                <Formik initialValues={{title: this.state.title, description: this.state.description, date: '', time: '', src: this.state.src, comments: this.state.comments, srcV: this.state.srcV, noteColour: this.state.noteColour, highlights: this.state.highlights}} 
                 onSubmit={values => {
                 this.saveNote(values)
                 }}
@@ -565,7 +720,8 @@ render() {
                     </div>
 
                     <button className="btn-primary" type="submit" onClick={()=>{delete items[this.state.currentCard]}}>Confirm</button>
-                    <button className="btn-primary" onClick={ this.highlightClick }>Highlight</button>
+                    <Button className="btn-primary" 
+                       onClick={() => {this.highlightToggle()}}>Highlight</Button>
                     <button className="btn-primary" onClick={()=> 
                     {
                       this.confirmDelete()
@@ -573,9 +729,8 @@ render() {
                     }}
                     > Delete Note</button>
 
-                    <div>
-                      {this.highlightText()}
-                    </div>
+                    <Button onClick={()=> this.resetHighlights()}>Reset Highlights</Button>
+
                   </Form>
                   }
                 </Formik>
@@ -584,6 +739,9 @@ render() {
       </div>
     )
   }
+
+  
+
 }
 
 export default NotesView;
