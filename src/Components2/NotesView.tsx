@@ -13,6 +13,7 @@ import HighlightParse from './HighlightParse';
 import SortView from './SortView';
 import PickerPopUp from './PickerPopUp';
 import { getCurrentDate, getCurrentTime } from './GetDateTime';
+import Timer from './Timer';
 
 interface IState{
   isModalOpen: boolean,
@@ -411,13 +412,16 @@ render() {
               console.log("working")
             }
               }>+</button></li>
-            //TODO Fix
-            <Button onClick={() => {this.refresh()}}>refresh</Button>
-
+              {/*
               <li className = "drawer"><button className='btn-sidenav' onClick={() => {
               console.log(items[0].title) 
               this.refresh()}
               }>Refresh</button></li>
+              */}
+              <li>
+                <Timer></Timer>
+              </li>
+
             <div>
             <SortView/>
             </div>

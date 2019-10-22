@@ -6955,6 +6955,16 @@ mkdirp@0.5.1, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1:
   dependencies:
     minimist "0.0.8"
 
+moment-duration-format@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/moment-duration-format/-/moment-duration-format-2.3.2.tgz#5fa2b19b941b8d277122ff3f87a12895ec0d6212"
+  integrity sha512-cBMXjSW+fjOb4tyaVHuaVE/A5TqkukDWiOfxxAjY+PEqmmBQlLwn+8OzwPiG3brouXKY5Un4pBjAeB6UToXHaQ==
+
+moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
+
 moo@^0.4.3:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/moo/-/moo-0.4.3.tgz#3f847a26f31cf625a956a87f2b10fbc013bfd10e"
@@ -8772,6 +8782,14 @@ react-cookie@^4.0.1:
     hoist-non-react-statics "^3.0.0"
     universal-cookie "^4.0.0"
 
+react-countdown-now@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-countdown-now/-/react-countdown-now-2.1.1.tgz#88901eb776907338da137effbf7cdbec5b9274c6"
+  integrity sha512-DGSd/EGzigIsixQNzPQbk376zG49IVAyMCUkMgDEuIXlIRKQwB44Fg8uA3zrZ+aQVAuzsyb6fJWskPxIP56DYg==
+  dependencies:
+    lodash.isequal "^4.5.0"
+    prop-types "^15.7.2"
+
 react-dev-utils@^9.0.4:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-9.1.0.tgz#3ad2bb8848a32319d760d0a84c56c14bdaae5e81"
@@ -8923,6 +8941,11 @@ react-scripts@3.1.2:
     workbox-webpack-plugin "4.3.1"
   optionalDependencies:
     fsevents "2.0.7"
+
+react-timer-machine@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-timer-machine/-/react-timer-machine-1.0.2.tgz#c8d4b8bb5701ac890f4101c0add134f5408a96df"
+  integrity sha512-2O6AvKMLknKAjmi/g2FCy41AzBYpoYP599yacZ6fXO/7DCZ+JSwnUFkLrOp1/Vz4DN4WBcqKNVnVAoui39Ee6w==
 
 react-transition-group@^1.2.1:
   version "1.2.1"
