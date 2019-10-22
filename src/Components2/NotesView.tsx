@@ -523,6 +523,7 @@ render() {
           <Form>
           <div>
               <TextField 
+              className = "text" 
               placeholder="Title"
               name="title" 
               value={values.title} 
@@ -531,7 +532,8 @@ render() {
           />
           </div>
           <div>
-          <TextareaAutosize 
+          <TextareaAutosize
+              className = "text" 
               rows={20}
               rowsMax={20}
               //columns={3}
@@ -544,6 +546,7 @@ render() {
           </div>
           <div>
               <TextField 
+              className = "text" 
               placeholder="Image Link"
               name="src" 
               value={values.src} 
@@ -553,6 +556,7 @@ render() {
           </div>
           <div>
             <TextField
+            className = "text" 
             placeholder="Youtube Link"
             name="srcV"
             value={values.srcV}
