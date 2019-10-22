@@ -14,6 +14,8 @@ These notes can have a video and or an image attached to them as well. This was 
 
 Our next feature is commenting, users can add comments to notes, if they want to add some more information, or add some more context without editing the main note.
 
+As well as commenting, users can use the search function to find notes, by searching for the contents of their body or title.
+
 Another interesting feature is colour tagging, this allows users to colour coordinate their notes to find related topics easier, or highlight certain notes.
 
 Users can also highlight sections of their notes, and to make it easier to view certain sentances.
@@ -27,7 +29,11 @@ As mentioned previously, we would like to implement a more robust saving and loa
 
 In the future we would like to allow users to share notes between devices, for instance typing notes on their computer, and reviewing them on a mobile device. We have already implemented a responsive mobile design.
 
-Another planned feature is to add quizes that can be generated from highlighted notes
+Another planned feature is to add quizes that can be generated from highlighted notes.
+
+As a team of AUT students, we also wanted to add AUT specific features, such as timetable sync with our notes. This would allow automatic creation of notes to be filled during a lecture.
+
+Our final planned feature was to add a break system, so users can take a timed break, and be notified when it is time to get back to studying.
 
 ## Installation
 To install install from source, clone the repo, and run.
