@@ -309,8 +309,9 @@ export class NotesView extends React.Component <IProps, IState> {
   saveToCookie(arr:any){
     var json_str = JSON.stringify(arr);
     //Cookies.name('mycookie');
-    document.cookie = "myCookie = " + json_str;
-    console.log(json_str);
+    var d = new Date();
+    d.setFullYear(d.getFullYear() + 10);
+    document.cookie = "myCookie = " + json_str + ";expires="+d.toUTCString() + ";";
     console.log("saved")
   }
 
